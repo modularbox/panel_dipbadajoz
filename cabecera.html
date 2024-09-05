@@ -128,7 +128,7 @@
                                 </g>
                             </svg>
                             <!--end::Svg Icon-->
-                        </span>
+                        </span>>
                     </button>
                     <!--end::Toolbar-->
                 </div>
@@ -226,7 +226,8 @@
                                     <span class="svg-icon menu-icon">
                                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
                                         <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-12-28-020759/theme/html/demo1/dist/../src/media/svg/icons/General/User.svg--><svg
+                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2020-12-28-020759/theme/html/demo1/dist/../src/media/svg/icons/General/User.svg-->
+                                            <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                                                 viewBox="0 0 24 24" version="1.1">
@@ -243,7 +244,7 @@
                                             <!--end::Svg Icon--></span>
                                     </span>
                                     <span class="menu-text">Mi Perfil</span>
-                                </a>
+                            </a>
                             </li>
                             <?php }?>
                             <li class="menu-section">
@@ -280,7 +281,17 @@
                                             </span>
                                         </li>
 										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==36 || $_GET["s"]==37 || $_GET["s"]==39 || $_GET["s"]==40 || $_GET["s"]==41)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
+										<li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-music">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Audio</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li>
+										<!-- <li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==36 || $_GET["s"]==37 || $_GET["s"]==39 || $_GET["s"]==40 || $_GET["s"]==41)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
                                             data-menu-toggle="hover">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <i class="menu-bullet la la-music">
@@ -343,7 +354,7 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </li>
+                                        </li> -->
 										
 										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==15 || $_GET["s"]==16 || $_GET["s"]==17 || $_GET["s"]==18 || $_GET["s"]==19)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
                                             data-menu-toggle="hover">
@@ -389,7 +400,17 @@
                                             </div>
                                         </li>
 										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==31 || $_GET["s"]==32 || $_GET["s"]==33 || $_GET["s"]==34)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
+										<li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-cog">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Automatización</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li>
+										<!-- <li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==31 || $_GET["s"]==32 || $_GET["s"]==33 || $_GET["s"]==34)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
                                             data-menu-toggle="hover">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <i class="menu-bullet la la-cog">
@@ -422,8 +443,19 @@
                                                 </ul>
                                             </div>
                                         </li>
+										 -->
+                                         <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-flag">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Pistas deportivas</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li>
 										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==21 || $_GET["s"]==22)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
+										<!-- <li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==21 || $_GET["s"]==22)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
                                             data-menu-toggle="hover">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <i class="menu-bullet la la-flag">
@@ -501,9 +533,21 @@
                                                     </li>
                                                 </ul>
                                             </div>
+                                        </li> -->
+										
+
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-lightbulb">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Luces</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
                                         </li>
 										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==8 || $_GET["s"]==9 || $_GET["s"]==11 || $_GET["s"]==12  || $_GET["s"]==13 || $_GET["s"]==14 || $_GET["s"]==42 || $_GET["s"]==43)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
+										<!-- <li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==8 || $_GET["s"]==9 || $_GET["s"]==11 || $_GET["s"]==12  || $_GET["s"]==13 || $_GET["s"]==14 || $_GET["s"]==42 || $_GET["s"]==43)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
                                             <a href="javascript:;" class="menu-link menu-toggle">
                                                 <i class="menu-bullet la la-lightbulb">
                                                     <span></span>
@@ -558,272 +602,113 @@
                                                     <?php }?>
                                                 </ul>
                                             </div>
-                                        </li>
+                                        </li>  -->
 										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==23 || $_GET["s"]==24)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-university">
-                                                    <span></span>
-                                                </i>
-                                                <span class="menu-text">Parques</span>
-                                                <i class="menu-arrow"></i>
-                                            </a>
-                                            <div class="menu-submenu">
-                                                <i class="menu-arrow"></i>
-                                                <ul class="menu-subnav">
-                                                    <li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==23 || $_GET["s"]==24)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true">
-                                                        <a href="index.php?s=23" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Nodos</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==26 || $_GET["s"]==27 || $_GET["s"]==28 || $_GET["s"]==29 || $_GET["s"]==30)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-bell-o">
-                                                    <span></span>
-                                                </i>
-                                                <span class="menu-text">Campanas</span>
-                                                <i class="menu-arrow"></i>
-                                            </a>
-                                            <div class="menu-submenu">
-                                                <i class="menu-arrow"></i>
-                                                <ul class="menu-subnav">
-                                                    <li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==26 || $_GET["s"]==27 )){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true">
-                                                        <a href="index.php?s=26" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Nodos</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==28 || $_GET["s"]==29)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true">
-                                                        <a href="index.php?s=28" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Campana</span>
-                                                        </a>
-                                                    </li>
-													<li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==30)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true">
-                                                        <a href="index.php?s=30" class="menu-link">
-                                                        <!--<a href="#" class="menu-link">-->
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Reloj</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-										
-										<li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==38)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true"
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="false"
                                             data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-video">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la la-university">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">Videovigilancia</span>
-                                                <i class="menu-arrow"></i>
+                                                <span class="text-hidden-menu">Parques</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
-                                            <div class="menu-submenu">
-                                                <i class="menu-arrow"></i>
-                                                <ul class="menu-subnav">
-                                                    <li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==38)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true">
-                                                        <a href="index.php?s=38" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Nodos</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
                                         </li>
 										
-                                        <li class="menu-item menu-item-submenu <?php if(isset($_GET["s"]) && ($_GET["s"]==3 || $_GET["s"]==4 || $_GET["s"]==5 || $_GET["s"]==6 || $_GET["s"]==7)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-tint">
-                                                    <span></span>
-                                                </i>
-                                                <span class="menu-text">Multiwater</span>
-                                                <!--<span class="menu-label">
-														<span class="label label-rounded label-primary">6</span>
-													</span>-->
-                                                <i class="menu-arrow"></i>
-                                            </a>
-                                            <div class="menu-submenu">
-                                                <i class="menu-arrow"></i>
-                                                <ul class="menu-subnav">
-                                                    <li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==3 || $_GET["s"]==4)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
-                                                        <a href="index.php?s=3" class="menu-link menu-toggle">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Depósitos</span>
-                                                        </a>
-                                                    </li>
-													<li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==5 || $_GET["s"]==6)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
-                                                        <a href="index.php?s=5" class="menu-link menu-toggle">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Contadores</span>
-                                                        </a>
-                                                    </li>
-													<li class="menu-item <?php if(isset($_GET["s"]) && ($_GET["s"]==7)){echo "menu-item-open menu-item-here";}?>" aria-haspopup="true" data-menu-toggle="hover">
-                                                        <a href="index.php?s=7" class="menu-link menu-toggle">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Ajustes</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-
-										<li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-thermometer">
-                                                    <span></span>
-                                                </i>
-                                                <span class="menu-text">Climatización</span>
-                                                <i class="menu-arrow"></i>
-                                            </a>
-                                            <div class="menu-submenu">
-                                                <i class="menu-arrow"></i>
-                                                <ul class="menu-subnav">
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Lugares</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Calendarios</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Configuración</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-										
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="false"
                                             data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-key">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la la-bell-o">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">ModularKeys</span>
+                                                <span class="text-hidden-menu">Campanas</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
                                         </li>
-
-                                        <li class="menu-item menu-item-submenu" aria-haspopup="true"
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="false"
                                             data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-shopping-cart">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-video">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">E-Food</span>
+                                                <span class="text-hidden-menu">Videovigilancia</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
-                                        </li>
-										
-										 <li class="menu-item menu-item-submenu" aria-haspopup="true"
+                                        </li> 
+                                        <li class="menu-item menu-item-submenu" aria-haspopup="false"
                                             data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-bell">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-tint">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">Alarma</span>
+                                                <span class="text-hidden-menu">Multiwater</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
-                                        </li>
-										
-										<li class="menu-item menu-item-submenu" aria-haspopup="true"
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
                                             data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-cloud">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-thermometer">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">Cloud</span>
+                                                <span class="text-hidden-menu">Climatización</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
-                                        </li>
-										
-                                        <li class="menu-item menu-item-submenu" aria-haspopup="true" data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-wifi">
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-key">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">Fibrabox.com</span>
-                                                <i class="menu-arrow"></i>
+                                                <span class="text-hidden-menu">ModularKeys</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
-                                            <div class="menu-submenu">
-                                                <i class="menu-arrow"></i>
-                                                <ul class="menu-subnav">
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Nodos</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Tarifas</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Routes</span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="menu-item" aria-haspopup="true">
-                                                        <a href="#" class="menu-link">
-                                                            <i class="menu-bullet menu-bullet-dot">
-                                                                <span></span>
-                                                            </i>
-                                                            <span class="menu-text">Incidencias</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-
-                                         <li class="menu-item" aria-haspopup="true" data-menu-toggle="hover">
-                                            <a href="javascript:;" class="menu-link menu-toggle">
-                                                <i class="menu-bullet la la-magic">
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-shopping-cart">
                                                     <span></span>
                                                 </i>
-                                                <span class="menu-text">Domótica</span>
+                                                <span class="text-hidden-menu">E-Food</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-bell">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Alarma</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-cloud">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Cloud Alarma</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-wifi">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Fibrabox.com</span>
+                                                <i class="arrow-hidden-menu">></i>
+                                            </a>
+                                        </li> <li class="menu-item menu-item-submenu" aria-haspopup="false"
+                                            data-menu-toggle="hover">
+                                            <a href="javascript:;" class="btn-hidden-menu">
+                                                <i class="icon-hidden-menu la-magic">
+                                                    <span></span>
+                                                </i>
+                                                <span class="text-hidden-menu">Domótica</span>
+                                                <i class="arrow-hidden-menu">></i>
                                             </a>
                                         </li>
-
+                                        
                                     </ul>
                                 </div>
                             </li>
