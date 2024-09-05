@@ -1,0 +1,417 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+		//$activo=quitaComillasD($_POST["activo"]);
+		$descripcion=quitaComillasD($_POST["descripcion"]);
+		$horaInicio=quitaComillasD($_POST["horaInicio"]);
+		$horaFin=quitaComillasD($_POST["horaFin"]);
+        $nRepeticiones=quitaComillasD($_POST["nRepeticiones"]);
+        $tiempoEntreRepeticiones=quitaComillasD($_POST["tiempoEntreRepeticiones"]);
+		$l=quitaComillasD($_POST["programaCampana_L_hidden"]);
+		$m=quitaComillasD($_POST["programaCampana_M_hidden"]);
+		$x=quitaComillasD($_POST["programaCampana_X_hidden"]);
+		$j=quitaComillasD($_POST["programaCampana_J_hidden"]);
+		$v=quitaComillasD($_POST["programaCampana_V_hidden"]);
+		$s=quitaComillasD($_POST["programaCampana_S_hidden"]);
+		$d=quitaComillasD($_POST["programaCampana_D_hidden"]);
+		
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$datosUpdate=",idusuario=\"".$idusuario."\"";
+		}else if($_SESSION["permisossession"]==1 || $_SESSION["permisossession"]==2){
+			$datosUpdate=",idusuario=\"".$idusuario."\"";
+		}
+		
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $idusuario==0){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+			$guardado="s";
+
+			$patron="UPDATE campanas_programas SET nombre=\"%s\",descripcion=\"%s\",guardado=\"s\",horainicio=\"%s\",horafin=\"%s\",nrepeticiones=\"%s\",tiemporepeticiones=\"%s\",l=\"%s\",m=\"%s\",x=\"%s\",j=\"%s\",v=\"%s\",s=\"%s\",d=\"%s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron,$nombre,$descripcion,$horaInicio,$horaFin,$nRepeticiones,$tiempoEntreRepeticiones,$l,$m,$x,$j,$v,$s,$d,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1124334645237766638667876990");
+
+			$nombreClienteMenu="";
+			if($idusuario>0){
+				$patron3="SELECT nombre,apellidos FROM usuarios WHERE id=\"%s\"";
+				$sql3=sprintf($patron3,$idusuario);
+				$respuesta3=mysqli_query($con,$sql3) or die ("Error al buscar 1233664556535674363365544");
+				$fila3=mysqli_fetch_array($respuesta3);
+				$nombreClienteMenu=$fila3[0];
+				
+				mysqli_free_result($respuesta3);
+			}
+
+		}
+
+		$titulof="EDICIÓN DE PROGRAMA";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,activo,descripcion,idusuario,guardado,horainicio,horafin,l,m,x,j,v,s,d,nrepeticiones,tiemporepeticiones FROM campanas_programas WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1233674367665653663365544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$activo=$fila[1];
+			$descripcion=$fila[2];
+			$idusuario=$fila[3];
+			$guardado=$fila[4];
+			$horaInicio=$fila[5];
+			$horaFin=$fila[6];
+			$l=$fila[7];
+			$m=$fila[8];
+			$x=$fila[9];
+			$j=$fila[10];
+			$v=$fila[11];
+			$s=$fila[12];
+			$d=$fila[13];
+            $nRepeticiones=$fila[14];
+            $tiempoEntreRepeticiones=$fila[15];
+
+			$nombreClienteMenu="";
+			if($idusuario>0){
+				$patron3="SELECT nombre,apellidos FROM usuarios WHERE id=\"%s\"";
+				$sql3=sprintf($patron3,$idusuario);
+				$respuesta3=mysqli_query($con,$sql3) or die ("Error al buscar 1233664556535674363365544");
+				$fila3=mysqli_fetch_array($respuesta3);
+				$nombreClienteMenu=$fila3[0];
+				
+				mysqli_free_result($respuesta3);
+			}
+			
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE PROGRAMA";
+          }else{
+			$nombreClienteMenu="";
+
+			$nombre="";
+			$activo="N";
+			$descripcion="";
+			$idusuario=0;
+			$horaInicio="00:00:00";
+			$horaFin="23:59:59";
+			$l="s";
+			$m="s";
+			$x="s";
+			$j="s";
+			$v="s";
+			$s="s";
+			$d="s";
+            $nRepeticiones=2;
+            $tiempoEntreRepeticiones=60;
+			$guardado="n";
+			
+			$patron="INSERT INTO campanas_programas SET nombre=\"\",activo=\"\",horainicio=\"%s\",horafin=\"%s\",descripcion=\"\",guardado=\"n\",idusuario=\"%s\",fechaalta=\"%s\"";
+			$sql=sprintf($patron,$horaInicio,$horaFin,$idusuario,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1345256553876456345724363");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM campanas_programas WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 143435565445435657576363");
+
+			$titulof="NUEVO PROGRAMA";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=28');</script>");
+		//printf("<script>cargaLocation('index.php?s=29&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=28" class="text-muted">Campanas</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombreClienteMenu." -- ".$nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Programa','¿Estas seguro de que deseas eliminar este programa?',26,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=29<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información del Programa</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+										<?php echo cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+									</div>
+									<div class="col-lg-6">
+										<label>Nombre:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" maxlength="65"/>
+										<span class="form-text text-muted">Por favor introduce el nombre del nodo.</span>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Descripción:</label>
+										<input type="text" class="form-control" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" maxlength="140"/>
+									</div>
+								</div>
+							</div>
+                        </div>
+						<!--end::Card-->
+						 
+				
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración del programa</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								
+								<div class="form-group row">
+									<div class="col-lg-2">
+										<label>Hora Inicio:</label>
+										<input type="time" class="form-control" name="horaInicio" value="<?php echo $horaInicio;?>" placeholder="Hora Inicio" />
+									</div>
+									<div class="col-lg-2" style="display:none">
+										<label>Hora Fin:</label>
+										<input type="time" class="form-control" name="horaFin" value="<?php echo $horaFin;?>" placeholder="Hora Fin" />
+									</div>
+                                    <div class="col-lg-2">
+										<label>Número de repeticiones:</label>
+										<input type="number" class="form-control" name="nRepeticiones" value="<?php echo $nRepeticiones;?>" placeholder="Nº de Repeticiones" />
+									</div>
+                                    <div class="col-lg-2">
+										<label>Tiempo entre repeticiones:</label>
+										<select class="form-control" name="tiempoEntreRepeticiones" id="tiempoEntreRepeticiones">
+                                            <option value="0" <?php if($tiempoEntreRepeticiones==0){ echo "selected='selected'"; } ?>>Selecciona cuanto tiempo</option>
+											<option value="5" <?php if($tiempoEntreRepeticiones==5){ echo "selected='selected'"; } ?>>5 s</option>
+											<option value="10" <?php if($tiempoEntreRepeticiones==10){ echo "selected='selected'"; } ?>>10 s</option>
+											<option value="15" <?php if($tiempoEntreRepeticiones==15){ echo "selected='selected'"; } ?>>15 s</option>
+                                            <option value="30" <?php if($tiempoEntreRepeticiones==30){ echo "selected='selected'"; } ?>>30 s</option>
+                                            <option value="60" <?php if($tiempoEntreRepeticiones==60){ echo "selected='selected'"; } ?>>1 min</option>
+                                            <option value="120" <?php if($tiempoEntreRepeticiones==120){ echo "selected='selected'"; } ?>>2 min</option>
+                                        </select>                                        
+									</div>
+									
+								</div>
+								
+								<div class="form-group row">
+									<div class="col-lg-1">
+										<label>Lunes:</label>
+										<div id="programaCampana_L" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_L_hidden" name="programaCampana_L_hidden" value="<?php echo $l;?>">
+											<?php if($l=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<label>Martes:</label>
+										<div id="programaCampana_M" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_M_hidden" name="programaCampana_M_hidden" value="<?php echo $m;?>">
+											<?php if($m=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<label>Miércoles:</label>
+										<div id="programaCampana_X" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_X_hidden" name="programaCampana_X_hidden" value="<?php echo $x;?>">
+											<?php if($x=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<label>Jueves:</label>
+										<div id="programaCampana_J" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_J_hidden" name="programaCampana_J_hidden" value="<?php echo $j;?>">
+											<?php if($j=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<label>Viernes:</label>
+										<div id="programaCampana_V" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_V_hidden" name="programaCampana_V_hidden" value="<?php echo $v;?>">
+											<?php if($v=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<label>Sábado:</label>
+										<div id="programaCampana_S" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_S_hidden" name="programaCampana_S_hidden" value="<?php echo $s;?>">
+											<?php if($s=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+									<div class="col-lg-1">
+										<label>Domingo:</label>
+										<div id="programaCampana_D" onclick="activarDesactivarCheckCampanas(this,<?php echo $id;?>);" style="width:33px;height:33px;border: 1px solid #000000;border-radius: .42rem;background-color: #ffffff;cursor: pointer;border: 1px solid #b5b5c3;-webkit-box-align: center;padding-top: 3px;text-align:center">
+											<input type="hidden" id="programaCampana_D_hidden" name="programaCampana_D_hidden" value="<?php echo $d;?>">
+											<?php if($d=="s"){?>
+												<i class="fas fa-check" style="font-size: 25px; color: green;" title="Activado"></i>
+											<?php }else{?>
+												<i class="fas fa-times" style="font-size: 25px; color: red;" title="Desctivado"></i>
+											<?php }?>
+										</div>
+									</div>
+								</div>
+								
+                            </div>
+                        </div>
+						<!--end::Card-->
+						 
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración de la secuencia</h3>
+									<span class="form-text text-muted" style="font-weight: 400;">* (Cada secuencia tiene un retardo aproximado de 0.4 segundos)</span>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+							<?php if($guardado=="s"){?>
+                            <div class="card-body">
+                               <!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaConfigPrograma">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaConfigPrograma">
+									<?php configuracionProgramaCampanas($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+								
+                            </div>
+							<div class="card-footer">
+                                <div class="row">
+                                    <div class="col-lg-6 d-flex position-relative w-80 px-lg-35 m-auto">
+                                        <div class="btn btn-primary btn-lg btn-block" onClick="crearLineaProgramaCampanas(<?php echo $id?>);">Añadir fila</div>
+                                    </div>
+                                </div>
+                            </div>
+							<?php }?>
+                        </div>
+						<!--end::Card-->
+						 
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+
+<!--end::Global Theme Bundle-->
+
+<script>
+    jQuery(document).ready(function() {
+		//tabla
+        var columnasTab= [null,{ "width": "9%" },{ "width": "17%" },{ "width": "17%" },{ "width": "17%" },{ "width": "30%" },{ "width": "10%" }];
+        cargarTabla.init("tablaConfigPrograma",columnasTab,[1, "asc"],50,true);
+    });
+</script>

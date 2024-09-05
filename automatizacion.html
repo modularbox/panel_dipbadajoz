@@ -1,0 +1,647 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+		
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $idusuario==0 || $email=="" ){
+			$completo=false;
+			$faltacampo=true;
+		}
+		
+		$salidaUnoModo=quitaComillasD($_POST["salidaUnoModo"]);
+		$salidaDosModo=quitaComillasD($_POST["salidaDosModo"]);
+		$salidaTresModo=quitaComillasD($_POST["salidaTresModo"]);
+		$salidaCuatroModo=quitaComillasD($_POST["salidaCuatroModo"]);
+		$salidaCincoModo=quitaComillasD($_POST["salidaCincoModo"]);
+		$salidaSeisModo=quitaComillasD($_POST["salidaSeisModo"]);
+		$audio=quitaComillasD($_POST["audio"]);
+
+		if($confAutoSUno=="on"){
+			$confAutoSUno=$confAutoSUno;
+		}else{
+			$confAutoSUno="off";
+		}
+		
+		if($confAutoSDos=="on"){
+			$confAutoSDos=$confAutoSDos;
+		}else{
+			$confAutoSDos="off";
+		}
+
+		if($confAutoSTres=="on"){
+			$confAutoSTres=$confAutoSTres;
+		}else{
+			$confAutoSTres="off";
+		}
+
+		if($confAutoSCuatro=="on"){
+			$confAutoSCuatro=$confAutoSCuatro;
+		}else{
+			$confAutoSCuatro="off";
+		}
+
+		if($confAutoSCinco=="on"){
+			$confAutoSCinco=$confAutoSCinco;
+		}else{
+			$confAutoSCinco="off";
+		}
+
+		if($confAutoSSeis=="on"){
+			$confAutoSSeis=$confAutoSSeis;
+		}else{
+			$confAutoSSeis="off";
+		}
+	
+		if($audio=="on"){
+			$audio=$audio;
+		}else{
+			$audio="off";
+		}
+
+		if($completo){
+			$guardado="s";
+			//update
+		}
+
+		$titulof="EDICIÓN DE NODO";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,conexion,guardado,descripcion,idusuario,token,internal,email,l,m,x,j,v,s,d,horaDe,horaHasta,frecuencia,ubicacion,salidaunomodo,salidadosmodo,salidatresmodo,salidacuatromodo,salidacincomodo,salidaseismodo,salidaunomanualactivado,salidadosmanualactivado,salidatresmanualactivado,salidacuatromanualactivado,salidacincomanualactivado,salidaseismanualactivado,versionplaca,numpcb,rpi,tiporpi,nummicrosd,versionsoftware,obscomunicacionnodo FROM safey_nodos WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 12336763365544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$conexion=$fila[1];
+			$guardado=$fila[2];
+			$descripcion=$fila[3];
+			$idusuario=$fila[4];
+			$token=$fila[5];
+			$internal=$fila[6];
+			$email=$fila[7];
+            $l=$fila[8];
+            $m=$fila[9];
+            $x=$fila[10];
+            $j=$fila[11];
+            $v=$fila[12];
+            $s=$fila[13];
+            $d=$fila[14];
+            $horaDe=$fila[15];
+            $horaHasta=$fila[16];
+            $frecuencia=$fila[17];
+			$ubicacion=$fila[18];
+			$salidaUnoModo=$fila[19];
+			$salidaDosModo=$fila[20];
+			$salidaTresModo=$fila[21];
+			$salidaCuatroModo=$fila[22];
+			$salidaCincoModo=$fila[23];
+			$salidaSeisModo=$fila[24];
+			$confAutoSUno=$fila[25];
+			$confAutoSDos=$fila[26];
+			$confAutoSTres=$fila[27];
+			$confAutoSCuatro=$fila[28];
+			$confAutoSCinco=$fila[29];
+			$confAutoSSeis=$fila[30];
+			$versionPlaca=$fila[31];
+			$numPcb=$fila[32];
+			$rpi=$fila[33];
+			
+			$tipoRpi="";
+			$patron9="SELECT modelo FROM tiporaspberry WHERE id=\"%s\" AND borrado=\"n\"";
+			$sql9=sprintf($patron9,$fila[34]);
+			$respuesta9=mysqli_query($con,$sql9) or die ("Error al buscar 8578351424309786112344574565465466");
+			if(mysqli_num_rows($respuesta9)>0){
+				$fila9=mysqli_fetch_array($respuesta9);
+				$tipoRpi=$fila9[0];
+			}
+			mysqli_free_result($respuesta9);
+
+			$numMicrosd=$fila[35];
+			$versionSoftware=$fila[36];
+			$obsComunicacionNodo=$fila[37];
+	
+			$audio="off";
+
+			$idusuarioNombre="-";
+			$patron99="SELECT nombre,apellidos FROM usuarios WHERE id=\"%s\"";
+			$sql99=sprintf($patron99,$idusuario);
+			$respuesta99=mysqli_query($con,$sql99) or die ("Error al buscar 12339996763365544");
+			if(mysqli_num_rows($respuesta99)>0){
+				$fila99=mysqli_fetch_array($respuesta99);
+				$idusuarioNombre=$fila99[0]." ".$fila99[1];
+			}
+			mysqli_free_result($respuesta99);
+			
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE NODO";
+          }else{
+
+			$nombre="";
+			$estado="off";
+			$descripcion="";
+			$idusuario=0;
+			$token=creaCompruebaTokenUsado("","safey_nodos",$con);
+			$internal="";
+			$numPcb="";
+			$versionPlaca="";
+			$rpi="";
+			$tipoRpi="";
+			$numMicrosd="";
+			$versionSoftware="";
+			$obsComunicacionNodo="";
+			$email="";
+			$ultimaconexion=date("Y-m-d");
+			$horaultimaconexion=date("H:i:s");
+            $frecuencia=0;
+			$ubicacion="";
+			
+			$salidaUnoModo="a";
+			$salidaDosModo="a";
+			$salidaTresModo="a";
+			$salidaCuatroModo="a";
+			$salidaCincoModo="a";
+			$salidaSeisModo="a";
+
+			$confAutoSUno="off";
+			$confAutoSDos="off";
+			$confAutoSTres="off";
+			$confAutoSCuatro="off";
+			$confAutoSCinco="off";
+			$confAutoSSeis="off";
+			
+			$audio="off";
+
+			$patron="INSERT INTO safey_nodos SET nombre=\"\",conexion=\"\",descripcion=\"\",guardado=\"n\",idusuario=\"%s\",token=\"%s\",internal=\"\",email=\"\",salidaunomodo=\"a\",salidaunomanualactivado=\"off\",salidadosmodo=\"a\",salidadosmanualactivado=\"off\", salidatresmodo=\"a\",salidatresmanualactivado=\"off\",salidacuatromodo=\"a\",salidacuatromanualactivado=\"off\",salidacincomodo=\"a\",salidacincomanualactivado=\"off\",salidaseismodo=\"a\",salidaseismanualactivado=\"off\",ultimaconexion=\"%s\",horaultimaconexion=\"%s\",fechaalta=\"%s\"";
+			$sql=sprintf($patron,$idusuario,$token,$ultimaconexion,$horaultimaconexion,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1345634576399");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM safey_nodos WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 14343576363");
+
+			$titulof="NUEVO NODO";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=33');</script>");
+		printf("<script>cargaLocation('index.php?s=34&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=15" class="text-muted">Automatización - Safey</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<!--<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>-->
+				<div class="btn btn-warning mr-2" onClick="cargaLocation('index.php?s=16&i=<?php echo $id; ?>');">Ir al Nodo SAFEY</div>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="#" id="formulario" enctype="multipart/form-data">
+
+						<?php if($_SESSION["permisossession"]!=3){?>
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información del Nodo (Safey)</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Conexión:<span class="text-danger">*</span></label>
+										<input data-switch="true" type="checkbox" name="conexion" <?php if($conexion=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger" readonly/>
+									</div>
+                                    <div class="col-lg-6">
+										<label>Audio:<span class="text-danger">*</span></label>
+										<input data-switch="true" type="checkbox" name="audio" <?php if($audio=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger" readonly/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $idusuario==""){echo "is-invalid";}?> inputReadOnly" name="idusuarioNombre" value="<?php echo $idusuarioNombre;?>" placeholder="idusuarioNombre" readonly/>
+									</div>
+                                    <div class="col-lg-6">
+										<label>Email:</label>
+										<input type="text" class="form-control <?php if($faltacampo && $email==""){echo "is-invalid";}?> inputReadOnly" name="email" value="<?php echo $email;?>" placeholder="Email" maxlength="65" readonly/>
+									</div>
+
+								</div>
+								<div class="form-group row">
+								    <div class="col-lg-6">
+										<label>Nombre:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?> inputReadOnly" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" maxlength="65" readonly/>
+									</div>
+                                    <div class="col-lg-6">
+										<label>Ubicación:</label>
+										<input type="text" class="form-control inputReadOnly" name="ubicacion" value="<?php echo $ubicacion;?>" placeholder="Ubicación" maxlength="65" readonly/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Observaciones:</label>
+										<input type="text" class="form-control inputReadOnly" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" maxlength="140" readonly/>
+									</div>
+								</div>
+                                <div class="form-group">
+                                    <!--<label>Configuración por defecto</label>
+                                    <div class="checkbox-inline">
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($l=="s"){echo "checked='checked'";}?> name="defLunes" id="defLunes" readonly>
+                                        <span></span>Lunes</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($m=="s"){echo "checked='checked'";}?> name="defMartes" id="defMartes" readonly>
+                                        <span></span>Martes</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($x=="s"){echo "checked='checked'";}?> name="defMiercoles" id="defMiercoles" readonly>
+                                        <span></span>Miércoles</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($j=="s"){echo "checked='checked'";}?> name="defJueves" id="defJueves" readonly>
+                                        <span></span>Jueves</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($v=="s"){echo "checked='checked'";}?> name="defViernes" id="defViernes" readonly>
+                                        <span></span>Viernes</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($s=="s"){echo "checked='checked'";}?> name="defSabado" id="defSabado" readonly>
+                                        <span></span>Sábado</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($d=="s"){echo "checked='checked'";}?> name="defDomingo" id="defDomingo" readonly>
+                                        <span></span>Domingo</label>
+
+                                        <label class="checkbox-lg" style="margin-right: 10px">
+                                        <input type="time" class="form-control inputReadOnly" value="<?php echo $horaDe;?>" name="defHoraDe" id="defHoraDe" readonly>
+                                        <span></span></label>
+
+                                        <label class="checkbox-lg">
+                                        <input type="time" class="form-control inputReadOnly" value="<?php echo $horaHasta;?>" name="defHoraHasta" id="defHoraHasta" readonly>
+                                        <span></span></label>                                                     
+
+                                    </div>-->
+                                    <span class="form-text text-muted">*Para configurar esta información debes acceder al nodo en el menú de SAFEY</span>
+                                </div>
+							</div>
+                            
+                        </div>
+						<?php }?>
+						<!--end::Card-->
+							
+						<!--begin::Card-->
+						<?php if($_SESSION["permisossession"]==1){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Comunicación del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<?php if($_SESSION["permisossession"]==1){?>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Token:</label>
+										<input type="text" class="form-control inputReadOnly" name="token" value="<?php echo $token;?>" placeholder="Token" readonly/>
+									</div>
+									<div class="col-lg-6">
+										<label>Descripción (RemoteIot):</label>
+										<input type="text" class="form-control inputReadOnly <?php if($faltacampo && $internalRepetido){echo "is-invalid";}?>" name="internal" value="<?php echo $internal;?>" placeholder="Internal" readonly/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nº PCB:</label>
+										<input type="text" class="form-control inputReadOnly" name="numPcb" value="<?php echo $numPcb;?>" placeholder="Nº PCB" readonly/>
+									</div>
+									<div class="col-lg-6">
+										<label>Versión PCB:</label>
+										<input type="text" class="form-control inputReadOnly" name="versionPlaca" value="<?php echo $versionPlaca;?>" placeholder="Versión Placa" readonly/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nº RPi:</label>
+										<input type="text" class="form-control inputReadOnly" name="rpi" value="<?php echo $rpi;?>" placeholder="Nº RPI" readonly/>
+									</div>
+									<div class="col-lg-6">
+										<label>Tipo Rpi:</label>
+										<input type="text" class="form-control inputReadOnly" name="tipoRpi" value="<?php echo $tipoRpi;?>" placeholder="Tipo RPI" readonly/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nº MicroSD:</label>
+										<input type="text" class="form-control inputReadOnly" name="numMicrosd" value="<?php echo $numMicrosd;?>" placeholder="Nº MicroSD" maxlength="80" readonly/>
+									</div>
+									<div class="col-lg-6">
+										<label>Versión Software:</label>
+										<input type="text" class="form-control inputReadOnly" name="versionSoftware" value="<?php echo $versionSoftware;?>" placeholder="Versión Software" readonly/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Observaciones:</label>
+										<input type="text" class="form-control inputReadOnly" name="obsComunicacionNodo" value="<?php echo $obsComunicacionNodo;?>" placeholder="Observaciones" maxlength="180" readonly/>
+									</div>
+								</div>
+								<?php }?>
+                            </div>
+                        </div>
+						<?php }?>
+						<!--end::Card--> 
+						
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Control de programas</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                     <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                       
+                                        <li class="nav-item">
+                                            <div class="btn btn-success font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="guardarConfSalidasAutomatizacion(<?php echo $id?>);">Guardar cambios
+                                            </div>
+                                        </li>
+                                       
+                                    </ul>
+                                    
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--start formulario campos-->
+								<div class="form-group row">
+									<div class="col-lg-4">
+										<label style="display: inherit;">Configuración Salida 1:<span class="text-danger">*</span></label>
+                                        <div class="d-flex mb-5">
+                                            <select class="form-control" style="width: 170px;" name="salidaUnoModo" id="salidaUnoModo" onChange="cambiarModoSalida(this,1);">
+                                                <option value="a" <?php if($salidaUnoModo=="a"){echo "selected";}?>>Modo Automático</option>
+                                                <option value="m" <?php if($salidaUnoModo=="m"){echo "selected";}?>>Modo Manual</option>
+										    </select>
+                                            <div class="d-flex align-items-center">
+                                                <div id="divConfigurarionSalida1" style="margin-left: 20px;<?php if($salidaUnoModo=="a"){echo ";display:none;";} ?>" > 
+										            <input data-switch="true" type="checkbox" id="confAutoSUno" name="confAutoSUno" <?php if($confAutoSUno=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                                </div>
+                                            </div>
+                                        </div>
+									</div>
+							
+									<div class="col-lg-4">
+										<label style="display: inherit;">Configuración Salida 2:<span class="text-danger">*</span></label>
+										<div class="d-flex mb-5">
+                                            <select class="form-control" style="width: 170px;" name="salidaDosModo" id="salidaDosModo" onChange="cambiarModoSalida(this,2);">
+                                                <option value="a" <?php if($salidaDosModo=="a"){echo "selected";}?>>Modo Automático</option>
+                                                <option value="m" <?php if($salidaDosModo=="m"){echo "selected";}?>>Modo Manual</option>
+                                            </select>
+                                            <div class="d-flex align-items-center">
+                                                <div id="divConfigurarionSalida2" style="margin-left: 20px;<?php if($salidaDosModo=="a"){echo ";display:none;";} ?>" >
+                                                  <input data-switch="true" type="checkbox" id="confAutoSDos" name="confAutoSDos" <?php if($confAutoSDos=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                                </div>
+                                            </div>
+                                        </div>
+									</div>
+									<div class="col-lg-4">
+										<label style="display: inherit;">Configuración Salida 3:<span class="text-danger">*</span></label>
+										<div class="d-flex mb-5">
+                                            <select class="form-control" style="width: 170px;" name="salidaTresModo" id="salidaTresModo" onChange="cambiarModoSalida(this,3);">
+                                                <option value="a" <?php if($salidaTresModo=="a"){echo "selected";}?>>Modo Automático</option>
+                                                <option value="m" <?php if($salidaTresModo=="m"){echo "selected";}?>>Modo Manual</option>
+                                            </select>
+                                            <div class="d-flex align-items-center">
+                                                <div id="divConfigurarionSalida3" style="margin-left: 20px;<?php if($salidaTresModo=="a"){echo ";display:none;";} ?>" >
+                                                    <input data-switch="true" type="checkbox" id="confAutoSTres" name="confAutoSTres" <?php if($confAutoSTres=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                                </div>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<div class="col-lg-4">
+										<label style="display: inherit;">Configuración Salida 4:<span class="text-danger">*</span></label>
+										<div class="d-flex mb-5">
+                                            <select class="form-control" style="width: 170px;" name="salidaCuatroModo" id="salidaCuatroModo" onChange="cambiarModoSalida(this,4);">
+                                                <option value="a" <?php if($salidaCuatroModo=="a"){echo "selected";}?>>Modo Automático</option>
+                                                <option value="m" <?php if($salidaCuatroModo=="m"){echo "selected";}?>>Modo Manual</option>
+                                            </select>
+                                            <div class="d-flex align-items-center">
+                                                <div id="divConfigurarionSalida4" style="margin-left: 20px;<?php if($salidaCuatroModo=="a"){echo ";display:none;";} ?>" >
+                                                    <input data-switch="true" type="checkbox" id="confAutoSCuatro" name="confAutoSCuatro" <?php if($confAutoSCuatro=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                                </div>
+                                            </div>
+                                        </div>
+									</div>
+									<div class="col-lg-4">
+										<label style="display: inherit;">Configuración Salida 5:<span class="text-danger">*</span></label>
+										<div class="d-flex mb-5">
+                                            <select class="form-control" style="width: 170px;" name="salidaCincoModo" id="salidaCincoModo" onChange="cambiarModoSalida(this,5);">
+                                                <option value="a" <?php if($salidaCincoModo=="a"){echo "selected";}?>>Modo Automático</option>
+                                                <option value="m" <?php if($salidaCincoModo=="m"){echo "selected";}?>>Modo Manual</option>
+                                            </select>
+										    <div class="d-flex align-items-center">
+                                                <div id="divConfigurarionSalida5" style="margin-left: 20px;<?php if($salidaCincoModo=="a"){echo ";display:none;";} ?>" >
+                                                    <input data-switch="true" type="checkbox" id="confAutoSCinco" name="confAutoSCinco" <?php if($confAutoSCinco=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                                </div>
+                                            </div>
+                                        </div>
+									</div>
+									<div class="col-lg-4">
+										<label style="display: inherit;">Configuración Salida 6:<span class="text-danger">*</span></label>
+										<div class="d-flex mb-5">
+                                            <select class="form-control" style="width: 170px;" name="salidaSeisModo" id="salidaSeisModo" onChange="cambiarModoSalida(this,6);">
+                                                <option value="a" <?php if($salidaSeisModo=="a"){echo "selected";}?>>Modo Automático</option>
+                                                <option value="m" <?php if($salidaSeisModo=="m"){echo "selected";}?>>Modo Manual</option>
+                                            </select>
+										    <div class="d-flex align-items-center">
+                                                <div id="divConfigurarionSalida6" style="margin-left: 20px;<?php if($salidaSeisModo=="a"){echo ";display:none;";} ?>" >
+                                                    <input data-switch="true" type="checkbox" id="confAutoSSeis" name="confAutoSSeis" <?php if($confAutoSSeis=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                                </div>
+                                             </div>
+                                        </div>
+									</div>
+								</div>
+								<!--end formulario campos-->
+								
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+									
+									</div>
+								</div>
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaConfigProgramAutomatizacion">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaConfigProgramAutomatizacion">
+									<?php configuracionProgramasAutomatizacion($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+						 
+						 
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial</h3>
+                                </div>
+                                
+                                <div class="card-toolbar">
+                                    <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+										
+                                        <li class="nav-item">
+											<label style="display: inherit;">Desde:</label>
+                                        </li>
+										<li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaIniHistorialSalidas" value="<?php echo $_SESSION["fechaIniHistorialSalidasAutomatizacion"];?>"/>
+                                        </li>
+										
+										<li class="nav-item">
+											<label style="display: inherit;">Hasta:</label>
+                                        </li>
+										<li class="nav-item">
+											<input class="form-control py-2 px-4" type="date" id="fechaFinHistorialSalidas" value="<?php echo $_SESSION["fechaFinHistorialSalidasAutomatizacion"];?>"/>
+                                        </li>
+										
+                                        <li class="nav-item">
+                                            <div class="btn btn-info font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="filtrarHistorialSalidasAutomatizacion(<?php echo $id?>);">Aplicar
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="javascript: void(0)" class="btn btn-icon btn-sm btn-success mr-1 ml-3" data-placement="top" title="Descargar Excel" onClick="historialSalidasAutomatizacionExcel(<?php echo $id?>);" data-original-title="Exportar a Excel">
+                                                <i class="la la-file-excel-o"></i>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                                <i class="ki ki-arrow-down icon-nm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									
+								</div>
+								<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHistorialSalidas">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHistorialSalidas">
+									<?php historialAccionesAutomatizacion($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+						
+						
+						
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+
+<!--end::Global Theme Bundle-->
+
+<script>
+    jQuery(document).ready(function() {
+        //tabla historial
+        var columnasTabHistorial= [null,{ "width": "15%" },{ "width": "15%" },{ "width": "20%" },{ "width": "20%" },{ "width": "15%" },{ "width": "15%" }];
+        cargarTabla.init("tablaHistorialSalidas",columnasTabHistorial,[1, "asc"],50,true);
+        
+        //tabla
+        var columnasTabConfProgramAutomatizacion= [null,{ "width": "60%" },{ "width": "30%" },{ "width": "10%" }];
+        cargarTabla.init("tablaConfigProgramAutomatizacion",columnasTabConfProgramAutomatizacion,[0, "asc"],50,true);
+    });
+</script>

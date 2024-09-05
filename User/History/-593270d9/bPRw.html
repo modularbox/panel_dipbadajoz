@@ -1,0 +1,81 @@
+<?php
+
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Imágenes</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Panel de Inicio</a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+
+					<!--begin::Card-->
+					<div class="card card-custom  mt-2 gutter-b" data-card="true">
+						<div class="card-header">
+							<div class="card-title">
+								<h3 class="card-label">Subidor de Imágenes</h3>
+							</div>
+							<div class="card-toolbar">
+								<a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+									<i class="ki ki-arrow-down icon-nm"></i>
+								</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="col-lg-12 col-md-12 col-sm-12">
+								<div class="dropzone dropzone-default dropzone-primary" id="kt_dropzone_panelInicio">
+									<div class="dropzone-msg dz-message needsclick">
+										<h3 class="dropzone-msg-title">Suelta los archivos aquí o haz clic para subir.</h3>
+										<span class="dropzone-msg-desc">Sube hasta 10 archivos</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end::Card-->
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script><!--si lo quitas funciona la grafica-->
+<script src="assets/js/scripts.bundle.js"></script><!--si lo quitas funciona la grafica-->
+<!--end::Global Theme Bundle-->
+
+<!--begin::Page Scripts(used by this page)-->
+<script src="js/subidorPanelInicio.js<?php echo '?t='.time();?>"></script>
+<!--end::Page Scripts-->

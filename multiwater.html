@@ -1,0 +1,523 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+
+   
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+		$conexion=quitaComillasD($_POST["conexion"]);
+		$modo=quitaComillasD($_POST["modo"]);
+		$descripcion=quitaComillasD($_POST["descripcion"]);
+		$token=quitaComillasD($_POST["token"]);
+		$internal=quitaComillasD($_POST["internal"]);
+
+		if($conexion=="on"){
+			$conexion=$conexion;
+		}else{
+			$conexion="off";
+		}
+
+		$rele1nombre=quitaComillasD($_POST["rele1nombre"]);
+		$rele2nombre=quitaComillasD($_POST["rele2nombre"]);
+		$rele3nombre=quitaComillasD($_POST["rele3nombre"]);
+		$rele4nombre=quitaComillasD($_POST["rele4nombre"]);
+		$rele5nombre=quitaComillasD($_POST["rele5nombre"]);
+		$rele6nombre=quitaComillasD($_POST["rele6nombre"]);
+		$erele1nombre=quitaComillasD($_POST["erele1nombre"]);
+		$erele2nombre=quitaComillasD($_POST["erele2nombre"]);
+		$erele3nombre=quitaComillasD($_POST["erele3nombre"]);
+		$erele4nombre=quitaComillasD($_POST["erele4nombre"]);
+		$erele5nombre=quitaComillasD($_POST["erele5nombre"]);
+		$erele6nombre=quitaComillasD($_POST["erele6nombre"]);
+		$boya1nombre=quitaComillasD($_POST["boya1nombre"]);
+		$boya2nombre=quitaComillasD($_POST["boya2nombre"]);
+		$boya3nombre=quitaComillasD($_POST["boya3nombre"]);
+		$boya4nombre=quitaComillasD($_POST["boya4nombre"]);
+		$rele1_1nombre=quitaComillasD($_POST["rele1_1nombre"]);
+		$rele2_2nombre=quitaComillasD($_POST["rele2_2nombre"]);
+	
+
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$datosUpdate=",idusuario=\"".$idusuario."\",token=\"".$token."\",internal=\"".$internal."\"";
+		}
+
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $idusuario==0){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+			$guardado="s";
+
+			$patron="UPDATE multiwater_nodos SET nombre=\"%s\",conexion=\"%s\", modo=\"%s\",descripcion=\"%s\",rele1nombre=\"%s\",rele2nombre=\"%s\",rele3nombre=\"%s\",rele4nombre=\"%s\",rele5nombre=\"%s\",rele6nombre=\"%s\",erele1nombre=\"%s\",erele2nombre=\"%s\",erele3nombre=\"%s\",erele4nombre=\"%s\",erele5nombre=\"%s\",erele6nombre=\"%s\",boya1nombre=\"%s\",boya2nombre=\"%s\",boya3nombre=\"%s\",boya4nombre=\"%s\",rele1_1nombre=\"%s\",rele2_2nombre=\"%s\",guardado=\"s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron, $nombre,$conexion, $modo, $descripcion,$rele1nombre,$rele2nombre,$rele3nombre,$rele4nombre,$rele5nombre,$rele6nombre,$erele1nombre,$erele2nombre,$erele3nombre,$erele4nombre,$erele5nombre,$erele6nombre,$boya1nombre,$boya2nombre,$boya3nombre,$boya4nombre,$rele1_1nombre,$rele2_2nombre,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 112");
+		}
+
+		$titulof="EDICIÓN DE NODO";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,conexion,modo,guardado,descripcion,idusuario,token,internal,rele1nombre,rele2nombre,rele3nombre,rele4nombre,rele5nombre,rele6nombre,erele1nombre,erele2nombre,erele3nombre,erele4nombre,erele5nombre,erele6nombre,boya1nombre,boya2nombre,boya3nombre,boya4nombre,rele1_1nombre,rele2_2nombre FROM multiwater_nodos WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1233");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$conexion=$fila[1];
+			$modo=$fila[2];
+			$guardado=$fila[3];
+			$descripcion=$fila[4];
+			$idusuario=$fila[5];
+			$token=$fila[6];
+			$internal=$fila[7];
+
+			$rele1nombre=$fila[8];
+			$rele2nombre=$fila[9];
+			$rele3nombre=$fila[10];
+			$rele4nombre=$fila[11];
+			$rele5nombre=$fila[12];
+			$rele6nombre=$fila[13];
+			$erele1nombre=$fila[14];
+			$erele2nombre=$fila[15];
+			$erele3nombre=$fila[16];
+			$erele4nombre=$fila[17];
+			$erele5nombre=$fila[18];
+			$erele6nombre=$fila[19];
+			$boya1nombre=$fila[20];
+			$boya2nombre=$fila[21];
+			$boya3nombre=$fila[22];
+			$boya4nombre=$fila[23];
+			$rele1_1nombre=$fila[24];
+			$rele2_2nombre=$fila[25];
+
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE NODO";
+          }else{
+
+			$nombre="";
+			$conexion="off";
+			$modo="aut";
+			$descripcion="";
+			$idusuario=0;
+			$token=creaCompruebaTokenUsado("","multiwater_nodos",$con);
+			$internal="";
+
+			$rele1nombre="Rele 1";
+			$rele2nombre="Rele 2";
+			$rele3nombre="Rele 3";
+			$rele4nombre="Rele 4";
+			$rele5nombre="Rele 5";
+			$rele6nombre="Rele 6";
+			$erele1nombre="E-Rele 1";
+			$erele2nombre="E-Rele 2";
+			$erele3nombre="E-Rele 3";
+			$erele4nombre="E-Rele 4";
+			$erele5nombre="E-Rele 5";
+			$erele6nombre="E-Rele 6";
+			$boya1nombre="Boya 1";
+			$boya2nombre="Boya 2";
+			$boya3nombre="Boya 3";
+			$boya4nombre="Boya 4";
+			$rele1_1nombre="Rele 1_1";
+			$rele2_2nombre="Rele 2_2";
+			$guardado="n";
+
+			$patron="INSERT INTO multiwater_nodos SET nombre=\"\",conexion=\"\", modo=\"\",descripcion=\"\",rele1nombre=\"\",rele2nombre=\"\",rele3nombre=\"\",rele4nombre=\"\",rele5nombre=\"\",rele6nombre=\"\",erele1nombre=\"\",erele2nombre=\"\",erele3nombre=\"\",erele4nombre=\"\",erele5nombre=\"\",erele6nombre=\"\",boya1nombre=\"\",boya2nombre=\"\",boya3nombre=\"\",boya4nombre=\"\",rele1_1nombre=\"\",rele2_2nombre=\"\",idusuario=\"%s\",token=\"%s\",internal=\"\",guardado=\"n\",fechaalta=\"%s\" ";
+			$sql=sprintf($patron,$idusuario,$token,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 133");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM multiwater_nodos WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 143");
+
+			$titulof="NUEVO NODO";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=3');</script>");
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=3" class="text-muted">Multiwater</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',2,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=4<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+						<!--begin::Card-->
+						<div class="card card-custom gutter-b example example-compact">
+							<div class="card-header">
+								<h3 class="card-title">Información del Nodo</h3>
+								<div class="card-toolbar">
+									<div class="example-tools justify-content-center">
+										<!--<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+										<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+										<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',2,'<?php echo $id;?>','','');">Eliminar</button>
+										<?php }?>-->
+									</div>
+								</div>
+							</div>
+							<!--begin::div-Form-->
+							<!--<form class="form">-->
+								<div class="card-body">
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+											<?php echo  cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+										</div>
+										<div class="col-lg-6">
+											<label>Nombre:<span class="text-danger">*</span></label>
+											<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" />
+											<span class="form-text text-muted">Por favor introduce el nombre del nodo.</span>
+										</div>
+									</div>
+									<?php if($_SESSION["permisossession"]==1){?>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Token:</label>
+											<input type="text" class="form-control" name="token" value="<?php echo $token;?>" placeholder="Token" />
+										</div>
+										<div class="col-lg-6">
+											<label>Descripción - Internal (RemoteIot):</label>
+											<input type="text" class="form-control" name="internal" value="<?php echo $internal;?>" placeholder="Internal" />
+										</div>
+									</div>
+									<?php }?>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Conexión:<span class="text-danger">*</span></label>
+											<input data-switch="true" type="checkbox" name="conexion" <?php if($conexion=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Modo:</label>
+											<?php echo  cargaModosMultiwaterGenerico($modo,"modo",$con);?>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-12">
+											<label>Descripción:</label>
+											<input type="text" class="form-control" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" />
+										</div>
+									</div>
+
+								</div>
+								<div class="card-footer">
+									<div class="row">
+										<!--<div class="col-lg-6">
+											<button type="reset" class="btn btn-primary mr-2">Save</button>
+											<button type="reset" class="btn btn-secondary">Cancel</button>
+										</div>
+										<div class="col-lg-6 text-lg-right">
+											<button type="reset" class="btn btn-danger">Delete</button>
+										</div>-->
+									</div>
+								</div>
+								<!--</form>-->
+							<!--end::DIV-Form-->
+						</div>
+						<!--end::Card-->
+						 
+						<!--begin::Card-->
+						<div class="card card-custom gutter-b example example-compact">
+							<div class="card-header">
+								<h3 class="card-title">Configuración de las salidas</h3>
+								<div class="card-toolbar">
+									<div class="example-tools justify-content-center">
+
+									</div>
+								</div>
+							</div>
+							<!--begin::div-Form-->
+							<!--<form class="form">-->
+								<div class="card-body">
+									<div class="form-group row">
+										<div class="col-lg-2">
+											<label>Rele 1 220v:</label>
+											<input type="text" class="form-control" name="rele1nombre" value="<?php echo $rele1nombre;?>" maxlength="12" placeholder="Rele 1" />
+										</div>
+										<div class="col-lg-2">
+											<label>Rele 2 220v:</label>
+											<input type="text" class="form-control" name="rele2nombre" value="<?php echo $rele2nombre;?>" maxlength="12" placeholder="Rele 2" />
+										</div>
+										<div class="col-lg-2">
+											<label>Rele 3 220v:</label>
+											<input type="text" class="form-control" name="rele3nombre" value="<?php echo $rele3nombre;?>" maxlength="12" placeholder="Rele 3" />
+										</div>
+										<div class="col-lg-2">
+											<label>Rele 4 220v:</label>
+											<input type="text" class="form-control" name="rele4nombre" value="<?php echo $rele4nombre;?>" maxlength="12" placeholder="Rele 4" />
+										</div>
+										<div class="col-lg-2">
+											<label>Rele 5 220v:</label>
+											<input type="text" class="form-control" name="rele5nombre" value="<?php echo $rele5nombre;?>" maxlength="12" placeholder="Rele 5" />
+										</div>
+										<div class="col-lg-2">
+											<label>Rele 6 220v:</label>
+											<input type="text" class="form-control" name="rele6nombre" value="<?php echo $rele6nombre;?>" maxlength="12" placeholder="Rele 6" />
+										</div>
+									</div>
+									
+									<div class="form-group row border-bottom" style="border-bottom: 2px solid #ebedf3!important;">
+										
+									</div>
+									
+									<div class="form-group row">
+										<div class="col-lg-2">
+											<label>Nombre E-Rele 1 12/24v:</label>
+											<input type="text" class="form-control" name="erele1nombre" value="<?php echo $erele1nombre;?>" maxlength="12" placeholder="E-Rele 1" />
+										</div>
+										<div class="col-lg-2">
+											<label>E-Rele 2 12/24v:</label>
+											<input type="text" class="form-control" name="erele2nombre" value="<?php echo $erele2nombre;?>" maxlength="12" placeholder="E-Rele 2" />
+										</div>
+										<div class="col-lg-2">
+											<label>E-Rele 3 12/24v:</label>
+											<input type="text" class="form-control" name="erele3nombre" value="<?php echo $erele3nombre;?>" maxlength="12" placeholder="E-Rele 3" />
+										</div>
+										<div class="col-lg-2">
+											<label>Rele 4 12/24v:</label>
+											<input type="text" class="form-control" name="erele4nombre" value="<?php echo $erele4nombre;?>" maxlength="12" placeholder="E-Rele 4" />
+										</div>
+										<div class="col-lg-2">
+											<label>E-Rele 5 12/24v:</label>
+											<input type="text" class="form-control" name="erele5nombre" value="<?php echo $erele5nombre;?>" maxlength="12" placeholder="E-Rele 5" />
+										</div>
+										<div class="col-lg-2">
+											<label>E-Rele 6 12/24v:</label>
+											<input type="text" class="form-control" name="erele6nombre" value="<?php echo $erele6nombre;?>" maxlength="12" placeholder="E-Rele 6" />
+										</div>
+									</div>
+									
+									<div class="form-group row border-bottom" style="border-bottom: 2px solid #ebedf3!important;">
+										
+									</div>
+									
+									<div class="form-group row">
+										<div class="col-lg-3">
+											<label>Boya 1:</label>
+											<input type="text" class="form-control" name="boya1nombre" value="<?php echo $boya1nombre;?>" maxlength="12" placeholder="Boya 1" />
+										</div>
+										<div class="col-lg-3">
+											<label>Boya 2:</label>
+											<input type="text" class="form-control" name="boya2nombre" value="<?php echo $boya2nombre;?>" maxlength="12" placeholder="Boya 2" />
+										</div>
+										<div class="col-lg-3">
+											<label>Boya 3:</label>
+											<input type="text" class="form-control" name="boya3nombre" value="<?php echo $boya3nombre;?>" maxlength="12" placeholder="Boya 3" />
+										</div>
+										<div class="col-lg-3">
+											<label>Boya 4:</label>
+											<input type="text" class="form-control" name="boya4nombre" value="<?php echo $boya4nombre;?>" maxlength="12" placeholder="Boya 4" />
+										</div>
+									</div>
+									
+									<div class="form-group row border-bottom" style="border-bottom: 2px solid #ebedf3!important;">
+										
+									</div>
+									
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Rele 1_1:</label>
+											<input type="text" class="form-control" name="rele1_1nombre" value="<?php echo $rele1_1nombre;?>" maxlength="12" placeholder="Rele 1_1" />
+										</div>
+										<div class="col-lg-6">
+											<label>Rele 2_2:</label>
+											<input type="text" class="form-control" name="rele2_2nombre" value="<?php echo $rele2_2nombre;?>" maxlength="12" placeholder="Rele 2_2" />
+										</div>
+									</div>
+								</div>
+							<!--</form>-->
+							<!--end::div-Form-->
+						</div>
+						<!--end::Card-->
+						 
+						 <!--begin::Card-->
+						<div class="card card-custom gutter-b example example-compact">
+							<div class="card-header">
+								<h3 class="card-title">Activación manual</h3>
+								<div class="card-toolbar">
+									<div class="example-tools justify-content-center">
+
+									</div>
+								</div>
+							</div>
+							<!--begin::div-Form-->
+							<!--<form class="form">-->
+								<div class="card-body">
+                                    <div class="form-group row fv-plugins-icon-container">
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele1nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="a" <?php if($a=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele2nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="b" <?php if($b=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele3nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="c" <?php if($c=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row fv-plugins-icon-container">
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele4nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="d" <?php if($d=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele5nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="f" <?php if($f=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele6nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="g" <?php if($g=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row fv-plugins-icon-container">
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $erele1nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="h" <?php if($h=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $erele2nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="i" <?php if($i=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $erele3nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="j" <?php if($j=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row fv-plugins-icon-container">
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $erele4nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="k" <?php if($k=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $erele5nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="l" <?php if($l=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $erele6nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="m" <?php if($m=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row fv-plugins-icon-container">
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $boya1nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="n" <?php if($n=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $boya2nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="o" <?php if($o=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $boya3nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="p" <?php if($p=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                    </div>
+                                     <div class="form-group row fv-plugins-icon-container">
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $boya4nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="q" <?php if($q=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele1_1nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="r" <?php if($r=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                        <label class="col-xl-1 col-lg-1 col-form-label"><?php echo $rele2_2nombre;?>:</label>
+                                        <div class="col-lg-3 col-xl-3">
+                                            <button type="button" class="btn btn-primary">Pulsar</button>
+											<input data-switch="true" type="checkbox" name="s" <?php if($s=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+                                        </div>
+                                    </div>
+								</div>
+							<!--</form>-->
+							<!--end::div-Form-->
+						</div>
+						<!--end::Card-->
+						 
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->

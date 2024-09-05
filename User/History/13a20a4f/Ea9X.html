@@ -1,0 +1,715 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$telefono=quitaComillasD($_POST["telefono"]);
+		$email=quitaComillasD($_POST["email"]);
+		$apellidos=quitaComillasD($_POST["apellidos"]);
+		$dni=quitaComillasD($_POST["dni"]);
+		$direccion=quitaComillasD($_POST["direccion"]);
+		$localidad=quitaComillasD($_POST["localidad"]);
+		$codigoPostal=quitaComillasD($_POST["codigoPostal"]);
+		$provincia=quitaComillasD($_POST["provincia"]);
+		$edad=quitaComillasD($_POST["edad"]);
+		$empadronado=quitaComillasD($_POST["empadronado"]);
+        $residente=quitaComillasD($_POST["residente"]);
+
+
+		$pin=intval(quitaComillasD($_POST["pin"]));
+		$llave=intval(quitaComillasD($_POST["llave"]));
+		$mando=intval(quitaComillasD($_POST["mando"]));
+
+		if(!isset($_POST["pinactivo"])){
+			$pinactivo="off";
+		}else{
+			$pinactivo=quitaComillasD($_POST["pinactivo"]);
+		}
+
+		if(!isset($_POST["llaveactivo"])){
+			$llaveactivo="off";
+		}else{
+			$llaveactivo=quitaComillasD($_POST["llaveactivo"]);
+		}
+		
+		if(!isset($_POST["mandoactivo"])){
+			$mandoactivo="off";
+		}else{
+			$mandoactivo=quitaComillasD($_POST["mandoactivo"]);
+		}
+		
+		$maillogin=intval(quitaComillasD($_POST["maillogin"]));
+
+		if(!isset($_POST["mailloginactivo"])){
+			$mailloginactivo="off";
+		}else{
+			$mailloginactivo=quitaComillasD($_POST["mailloginactivo"]);
+		}
+		
+
+		if($pinactivo=="on"){
+			$pinactivo=$pinactivo;
+		}else{
+			$pinactivo="off";
+		}
+
+		if($llaveactivo=="on"){
+			$llaveactivo=$llaveactivo;
+		}else{
+			$llaveactivo="off";
+		}
+
+		if($mandoactivo=="on"){
+			$mandoactivo=$mandoactivo;
+		}else{
+			$mandoactivo="off";
+		}
+
+		if($mailloginactivo=="on"){
+			$mailloginactivo=$mailloginactivo;
+		}else{
+			$mailloginactivo="off";
+		}
+		
+		$observaciones=quitaComillasD($_POST["observaciones"]);
+
+		
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$datosUpdate=",idusuario=\"".$idusuario."\"";
+		}else if($_SESSION["permisossession"]!=1){
+			$datosUpdate=",idusuario=\"".calculaIdEmpresa($con)."\"";
+		}
+		
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $apellidos=="" || $idusuario==0 || $dni=="" || $email==""){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+
+			//if guardado coger el post o hacer consulta para ver el estado del guardado
+				//consulta for recorrer las placas de ese cliente idcliente o idusuario crear variable arriba, aqui ya tienes el horario predefinido
+					//insert into safey_accesosnodos, con ese id nodo ese id acceso ($id)
+                    // si está todo a x no guardar en bbdd o ver que es mejor
+
+
+			$guardado="s";
+			
+
+			/*START gestionar si cambian de pin, llave, mando*/
+			$patron90="SELECT pin,llave,mando FROM safey_accesos WHERE id=\"%s\"";
+			$sql90=sprintf($patron90,$id);
+			$respuesta90=mysqli_query($con,$sql90) or die ("Error al buscar 1233676334575365549090490");
+			if(mysqli_num_rows($respuesta90)>0){
+				$fila90=mysqli_fetch_array($respuesta90);
+
+				if($fila90[0]!=$pin){//si es distinto poner a cero el anterior
+					$patron94="UPDATE safey_credenciales_pin SET idacceso=\"0\" WHERE id=\"%s\"";
+					$sql94=sprintf($patron94,$fila90[0]);
+					$respuesta94=mysqli_query($con,$sql94) or die ("Error al buscar 1121235445319494949154646989607");
+				}
+				if($fila90[0]!=$llave){//si es distinto poner a cero el anterior
+					$patron95="UPDATE safey_credenciales_llaves SET idacceso=\"0\" WHERE id=\"%s\"";
+					$sql95=sprintf($patron95,$fila90[0]);
+					$respuesta95=mysqli_query($con,$sql95) or die ("Error al buscar 11212354495959549154646989607");
+				}
+				if($fila90[0]!=$mando){//si es distinto poner a cero el anterior
+					$patron96="UPDATE safey_credenciales_mandos SET idacceso=\"0\" WHERE id=\"%s\"";
+					$sql96=sprintf($patron96,$fila90[0]);
+					$respuesta96=mysqli_query($con,$sql96) or die ("Error al buscar 11212354486868694949154646989607");
+				}
+			}
+			mysqli_free_result($respuesta90);
+			/*End gestionar si cambian de pin,llaves,mando*/
+
+			$patron="UPDATE safey_accesos SET nombre=\"%s\",telefono=\"%s\",email=\"%s\",pin=\"%s\",llave=\"%s\",mando=\"%s\",pinactivo=\"%s\",llaveactivo=\"%s\",mandoactivo=\"%s\",maillogin=\"%s\",mailloginactivo=\"%s\",observaciones=\"%s\",guardado=\"s\",dni=\"%s\",apellidos=\"%s\", direccion=\"%s\",localidad=\"%s\",codpostal=\"%s\",provincia=\"%s\",edad=\"%s\",empadronado=\"%s\",residente=\"%s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron,$nombre,$telefono,$email,$pin,$llave,$mando,$pinactivo,$llaveactivo,$mandoactivo,$maillogin,$mailloginactivo,$observaciones,$dni,$apellidos,$direccion,$localidad,$codigoPostal,$provincia,$edad,$empadronado,$residente,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 11243454690236638990");
+			
+
+            /***START gestion accesos desplegables***/
+			$datosUpdateAccesos=" AND idusuario<>0";
+			if($_SESSION["permisossession"]!=1){
+				$datosUpdateAccesos=" AND idusuario=\"".calculaIdEmpresa($con)."\"";
+			}
+			//pin
+			if($pin!=0 && is_numeric($_POST["pin"]) && ($_SESSION["permisossession"]==1 OR $_SESSION["permisossession"]==2)){
+				$patron1="UPDATE safey_credenciales_pin SET idacceso=\"%s\" WHERE id=\"%s\"%s";
+				$sql1=sprintf($patron1,$id,$pin,$datosUpdateAccesos);
+				$respuesta1=mysqli_query($con,$sql1) or die ("Error al buscar 112434414535469021366767838990");
+			}else if($pin==0){
+				$patron1="UPDATE safey_credenciales_pin SET idacceso=\"0\" WHERE idacceso=\"%s\"";
+				$sql1=sprintf($patron1,$id);
+				$respuesta1=mysqli_query($con,$sql1) or die ("Error al buscar 112434433414535469021366767838990");
+			}
+			//lave
+			if($llave!=0 && is_numeric($_POST["llave"]) && ($_SESSION["permisossession"]==1 OR $_SESSION["permisossession"]==2)){
+				$patron2="UPDATE safey_credenciales_llaves SET idacceso=\"%s\" WHERE id=\"%s\"%s";
+				$sql2=sprintf($patron2,$id,$llave,$datosUpdateAccesos);
+				$respuesta2=mysqli_query($con,$sql2) or die ("Error al buscar 11243224414535469021366767838990");
+			}else if($llave==0){
+				$patron2="UPDATE safey_credenciales_llaves SET idacceso=\"0\" WHERE idacceso=\"%s\"";
+				$sql2=sprintf($patron2,$id);
+				$respuesta2=mysqli_query($con,$sql2) or die ("Error al buscar 112434434564543414535469021366767838990");
+			}
+			//mando
+			if($mando!=0 && is_numeric($_POST["mando"]) && ($_SESSION["permisossession"]==1 OR $_SESSION["permisossession"]==2)){
+				$patron3="UPDATE safey_credenciales_mandos SET idacceso=\"%s\" WHERE id=\"%s\"%s";
+				$sql3=sprintf($patron3,$id,$llave,$datosUpdateAccesos);
+				$respuesta3=mysqli_query($con,$sql3) or die ("Error al buscar 11243224414353546390213636767838990");
+			}else if($mando==0){
+				$patron3="UPDATE safey_credenciales_mandos SET idacceso=\"0\" WHERE idacceso=\"%s\"";
+				$sql3=sprintf($patron3,$id);
+				$respuesta3=mysqli_query($con,$sql3) or die ("Error al buscar 11243443345645434145354690213366767838990");
+			}
+			/***END gestion accesos desplegables***/
+		}
+
+		$titulof="EDICIÓN DE ACCESO";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,idusuario,telefono,email,guardado,pin,llave,mando,pinactivo,llaveactivo,mandoactivo,maillogin,mailloginactivo,observaciones,apellidos,dni, direccion,localidad,codpostal,provincia,edad,empadronado,residente FROM safey_accesos WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1233676334575365544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$idusuario=$fila[1];
+			$telefono=$fila[2];
+			$email=$fila[3];
+			$guardado=$fila[4];
+			$pin=$fila[5];
+			$llave=$fila[6];
+			$mando=$fila[7];
+			$pinactivo=$fila[8];
+			$llaveactivo=$fila[9];
+			$mandoactivo=$fila[10];
+			$maillogin=$fila[11];
+			$mailloginactivo=$fila[12];
+			$observaciones=$fila[13];
+            $apellidos=$fila[14];
+            $dni=$fila[15];
+            $direccion=$fila[16];
+            $localidad=$fila[17];
+            $codigoPostal=$fila[18];
+            $provincia=$fila[19];
+            $edad=$fila[20];
+            $empadronado=$fila[21];
+            $residente=$fila[22];
+
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE ACCESO";
+          }else{
+
+			$nombre="";
+			$idusuario="";
+			$telefono="";
+			$email="";
+			$idusuario=0;
+
+			$pin="";
+			$pinactivo="n";
+			$llave="";
+			$llaveactivo="n";
+			$mando="";
+			$mandoactivo="n";
+			$maillogin="";
+			$mailloginactivo="n";
+			$guardado="s";
+			$observaciones="";
+
+            $apellidos="";
+            $dni="";
+            $direccion="";
+            $localidad="";
+            $codigoPostal="";
+            $provincia=0;
+            $edad=0;
+            $empadronado="n";
+            $residente="n";
+
+			$patron="INSERT INTO safey_accesos SET nombre=\"\",telefono=\"\",guardado=\"n\",idusuario=\"%s\",email=\"\",pin=\"0\",pinactivo=\"%s\",llave=\"0\",llaveactivo=\"%s\",mando=\"0\",mandoactivo=\"%s\",fechaalta=\"%s\",tipo=\"p\"";
+			$sql=sprintf($patron,$idusuario,$pinactivo,$llaveactivo,$mandoactivo,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1345345666345763");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM safey_accesos WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 143456743576363");
+
+			$titulof="NUEVO ACCESO";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=17');</script>");
+		printf("<script>cargaLocation('index.php?s=18&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Accesos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=17" class="text-muted">Gestión Accesos</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if(($_SESSION["permisossession"]==1 || $_SESSION["permisossession"]==2) && $guardado=="s"){?>
+				<button class="btn btn-danger mr-2" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',15,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+				<button class="btn btn-warning" onClick="enviarAcceosSafeyMail(<?php echo $id;?>);">Enviar Accesos Email</button>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=18<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información Acceso</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nombre:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" maxlength="65"/>
+										<span class="form-text text-muted">Por favor introduce el nombre del acceso.</span>
+									</div>
+									<div class="col-lg-6">
+										<label>Apellidos:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $apellidos==""){echo "is-invalid";}?>"" name="apellidos" value="<?php echo $apellidos;?>" placeholder="Apellidos" maxlength="65"/>
+									</div>
+								</div>
+                                <div class="form-group row">
+									<div class="col-lg-6">
+										<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+										<?php echo cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+                                    </div>
+									<div class="col-lg-6">
+										<label>DNI:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $dni==""){echo "is-invalid";}?>" name="dni" value="<?php echo $dni;?>" placeholder="DNI" maxlength="65"/>
+										<span class="form-text text-muted">Por favor introduce el DNI del acceso.</span>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Teléfono:</label><span class="text-danger">*</span>
+										<input type="text" class="form-control <?php if($faltacampo && $telefono==""){echo "is-invalid";}?>" name="telefono" value="<?php echo $telefono;?>" placeholder="Teléfono" maxlength="20"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Email:</label><span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $email==""){echo "is-invalid";}?>" name="email" value="<?php echo $email;?>" placeholder="Email" maxlength="65"/>
+									</div>
+								</div>
+                                <div class="form-group row">
+									<div class="col-lg-6">
+										<label>Direción:</label>
+										<input type="text" class="form-control" name="direccion" value="<?php echo $direccion;?>" placeholder="Dirección" maxlength="200"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Localidad:</label>
+										<input type="text" class="form-control" name="localidad" value="<?php echo $localidad;?>" placeholder="Localidad" maxlength="200"/>
+									</div>
+								</div>
+                                <div class="form-group row">
+									<div class="col-lg-6">
+										<label>Código postal:</label>
+										<input type="text" class="form-control" name="codigoPostal" value="<?php echo $codigoPostal;?>" placeholder="Código Postal" maxlength="20"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Provincia:</label>
+                                        <?php echo cargaProvinciasGenerico($provincia,"provincia",$con);?>
+									</div>
+								</div>
+                                <div class="form-group row">
+									<div class="col-lg-6">
+										<label>Edad:</label>
+										<input type="number" class="form-control" id="edad" name="edad" value="<?php echo $edad;?>" onkeyup="comprobarEdadIntroducida(this);" placeholder="Edad" maxlength="2"/>
+									</div>
+									<div class="col-lg-6">
+										
+									</div>
+								</div>
+                                <div class="form-group row">
+									<div class="col-lg-6">
+										<label>Empadronado:</label>
+										<select class='form-control' name="empadronado" id="empadronado">
+                                            <option value='n' <?php if($empadronado=="n"){echo " selected";}  ?>>No</option>
+                                            <option value='s' <?php if($empadronado=="s"){echo " selected";}  ?>>Sí</option>
+                                        </select>
+									</div>
+									<div class="col-lg-6">
+										<label>Residente:</label>
+										<select class='form-control' name="residente" id="residente">
+                                            <option value='n' <?php if($residente=="n"){echo " selected";}  ?>>No</option>
+                                            <option value='s' <?php if($residente=="s"){echo " selected";}  ?>>Sí</option>
+                                        </select>
+									</div>
+								</div>
+								<div class="form-group row">
+                                    <div class="col-lg-12">
+                                        <label>Observaciones:</label>
+                                        <input type="text" class="form-control" name="observaciones" value="<?php echo $observaciones;?>" placeholder="Observaciones" maxlength="140"/>
+                                    </div>
+                                </div>
+							</div>
+                        </div>
+						<!--end::Card-->
+	
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración Acceso</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                               <div class="form-group row">
+									<div class="col-lg-3">
+										<label>Pin:</label>
+										<?php if($_SESSION["permisossession"]==1 && $pin>0){?>
+										<a href='#' class='btn btn-icon btn-light btn-hover-danger btn-sm' onClick="confirmacion('warning','Eliminar Pin Almacén Safey','¿Estas seguro de que deseas eliminar este pin?',33,'<?php echo $pin;?>','<?php echo $id;?>');return false;" title="Eliminar este pin de este cliente y desasociar de este acceso.">
+											<span class='svg-icon svg-icon-md svg-icon-danger'>
+												<!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Write.svg-->
+												<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24px' height='24px' viewBox='0 0 24 24' version='1.1'>
+													<g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+														<rect x='0' y='0' width='24' height='24'></rect>
+														<path d='M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z' fill='#000000' fill-rule='nonzero'></path>
+														<path d='M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z' fill='#000000' opacity='0.3'></path>
+													</g>
+												</svg>
+												<!--end::Svg Icon-->
+											</span>
+										</a>
+										<?php }?>
+										<?php echo cargaPinClientesSafey($pin,"pin",$id,$con);?>
+									</div>
+									<div class="col-lg-3" style="display: grid">
+										<label>Estado Pin:</label>
+										<input data-switch="true" type="checkbox" name="pinactivo" <?php if($pinactivo=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+									</div>
+								   
+								   <div class="col-lg-3">
+										<label>Llave:</label>
+										<?php echo cargaLlavesClientesSafey($llave,"llave",$id,$con);?>
+								   </div>
+								   <div class="col-lg-3" style="display: grid">
+										<label>Estado Llave:</label>
+										<input data-switch="true" type="checkbox" name="llaveactivo" <?php if($llaveactivo=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-3">
+										<label>Mando:</label>
+										<?php echo cargaMandosClientesSafey($mando,"mando",$id,$con);?>
+									</div>
+									<div class="col-lg-3" style="display: grid">
+										<label>Estado Mando:</label>
+										<input data-switch="true" type="checkbox" name="mandoactivo" <?php if($mandoactivo=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+									</div>
+									
+									<div class="col-lg-3">
+										<label>Email:</label>
+										<?php echo cargaUsuariosClientesSafey($maillogin,"maillogin",$id,$idusuario,$con);?>
+									</div>
+									<div class="col-lg-3" style="display: grid">
+										<label>Estado Email:</label>
+										<input data-switch="true" type="checkbox" name="mailloginactivo" <?php if($mailloginactivo=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+									</div>
+								</div>
+                            </div>
+                        </div>
+						<!--end::Card-->
+						 
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración Puertas / Nodos</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                            	<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+									
+									</div>
+								</div>
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaAccesosNodosPuertas">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaAccesosNodosPuertas">
+									<?php permisosNodosPuertasAccesos($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+						 
+                        <!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial</h3>
+                                </div>
+                                
+                                <div class="card-toolbar">
+                                    <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                        
+                                        <li class="nav-item">
+											<label style="display: inherit;">Desde:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaIniHistorialPuertas" value="<?php echo $_SESSION["fechaIniHistorialPuertasSafeyAcceso"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+											<label style="display: inherit;">Hasta:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaFinHistorialPuertas" value="<?php echo $_SESSION["fechaFinHistorialPuertasSafeyAcceso"];?>"/>
+                                        </li>
+                                        
+                                        <li class="nav-item">
+                                            <?php echo cargaFiltroPuertasAccesoHistorial($id,$con);?>
+                                            
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="btn btn-info font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="filtrarHistorialPuertasSafeyAcceso(<?php echo $id?>);">Aplicar
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                                <i class="ki ki-arrow-down icon-nm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									
+								</div>
+								<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHistorialPuertas">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHistorialPuertas">
+									<?php puertasSafeyAccesoHistorial($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+    
+						 
+						 <!--begin::Card-->
+						 <?php if($_SESSION["permisossession"]==1){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial De Pagos</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                        
+                                        <!--<li class="nav-item">
+											<label style="display: inherit;">Desde:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaIniHistorialPagos" value="<?php echo $_SESSION["fechaIniHistorialPagos"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+											<label style="display: inherit;">Hasta:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaFinHistorialPagos" value="<?php echo $_SESSION["fechaFinHistorialPagos"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="btn btn-info font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="filtrarHistorialPagosSafey(<?php echo $id?>);">Aplicar
+                                            </div>
+                                        </li>-->
+										<li class="nav-item">
+                                             <a href="javascript: void(0)" class="btn btn-icon btn-sm btn-success mr-1 ml-3" data-placement="top" title="Descargar Excel" onClick="historialPagoAccesoSafey(<?php echo $id?>);" data-original-title="Exportar a Excel">
+                                                <i class="la la-file-excel-o"></i>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                                <i class="ki ki-arrow-down icon-nm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-12 col-xl-12">
+											<div class="row align-items-center">
+												<div class="col-md-2 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Nodo:</label>
+														<?php cargaNodosSafeyAccesos("","nodopagos",$id,$con) ?>
+													</div>
+												</div>
+												<div class="col-md-2 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Servicio:</label>
+														<div id="divTipoServicioPago"><?php echo cargarTipoServicioPagoNodo("","","",$con);?></div>
+													</div>
+												</div>
+												<div class="col-md-2 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Método Pago:</label>
+														<?php cargaTiposMetodosPago("","metodopago","",$con) ?>
+													</div>
+												</div>
+												<!--<div class="col-md-2 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Cód. Promo.:</label>
+														<input type="text" class="form-control" id="codpromo" value="" maxlength="255" placeholder="Código promocional"/>
+													</div>
+												</div>-->
+												<div class="col-md-2 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Fecha Inicio:</label>
+														<input type="date" class="form-control" id="finiciopago" value="<?php echo date('Y-m-d'); ?>"/>
+													</div>
+												</div>
+												<div class="col-md-2 my-5 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Fecha Fin:</label>
+														<input type="date" class="form-control" id="ffinpago" value="<?php echo date('Y-m-d'); ?>"/>
+													</div>
+												</div>
+											
+                                                <div class="col-md-2 my-5 my-md-0">
+													<a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="anadirPago(<?php echo $id;?>);return false;">Añadir</a>
+												</div>
+                                                
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<!--end::Search Form-->
+								
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHistorialPagos">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHistorialPagos">
+									<?php pagosSafeyHistorial($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						 <?php } ?>
+						<!--end::Card-->
+
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->
+
+<script>
+    jQuery(document).ready(function() {
+		//tabla
+        var columnasTabAccesosNodos= [null,{ "width": "20%" },{ "width": "5%" },{ "width": "5%" },{ "width": "5%" },{ "width": "5%" },{ "width": "5%" },{ "width": "5%" },{ "width": "5%" },{ "width": "5%" },{ "width": "15%" },{ "width": "15%" },{ "width": "10%" }];
+        cargarTabla.init("tablaAccesosNodosPuertas",columnasTabAccesosNodos,[0, "asc"],50,true);
+		
+        //tabla historial
+        var columnasTabHistorial= [null,{ "width": "15%" },{ "width": "15%" },{ "width": "20%" },{ "width": "15%" },{ "width": "15%" },{ "width": "15%" },{ "width": "10%" }];
+        cargarTabla.init("tablaHistorialPuertas",columnasTabHistorial,[1, "asc"],200,true);
+        
+		//tabla historial pagos
+        var columnasTabHistorialPagos= [null,{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "20%" }];
+        cargarTabla.init("tablaHistorialPagos",columnasTabHistorialPagos,[1, "asc"],200,true);
+    });
+</script>

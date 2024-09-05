@@ -1,0 +1,104 @@
+.color-white {
+  background-color: white !important;
+}
+
+.select-menu-container {
+  background-color: #ff1713 !important;
+}
+
+.menu-container-hover:hover {
+  background-color: #ff1713 !important;
+}
+
+.menu-link:hover {
+  background-color: #f73330d2 !important;
+}
+
+.menu-link:focus {
+  background-color: #3033f7d2 !important;
+}
+
+.li.menu-item.menu-item-submenu > a {
+  background-color: aqua;
+}
+
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading,
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link {
+  background-color: yellow !important;
+}
+.aside-menu
+  .menu-nav
+  > .menu-item.menu-item-active
+  > .menu-heading
+  .menu-icon.svg-icon
+  svg
+  g
+  [fill],
+.aside-menu
+  .menu-nav
+  > .menu-item.menu-item-active
+  > .menu-link
+  .menu-icon.svg-icon
+  svg
+  g
+  [fill] {
+  fill: #000 !important;
+}
+
+.svg-icon.svg-icon-primary svg g [fill] {
+  fill: #000000b0 !important;
+}
+
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-heading,
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-link {
+  background-color: #ff1713 !important;
+}
+
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-heading,
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-link {
+  background-color: #ff1713e8 !important;
+}
+
+.aside-menu .menu-nav > .menu-item > .menu-heading .menu-text,
+.aside-menu .menu-nav > .menu-item > .menu-link .menu-text {
+  color: #000;
+  font-weight: 500;
+}
+
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading .menu-text,
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link .menu-text {
+  color: #000;
+  font-weight: bold;
+}
+
+
+.aside-menu .menu-nav > .menu-item.menu-item-here > .menu-heading .menu-icon.svg-icon svg g [fill], .aside-menu .menu-nav > .menu-item.menu-item-here > .menu-link .menu-icon.svg-icon svg g [fill]{
+
+  fill: #000 !important;
+}
+
+
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-heading .menu-text, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-text{
+  color: #000;
+  font-weight: 500;
+}

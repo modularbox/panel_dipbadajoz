@@ -1,0 +1,384 @@
+<?php
+	//fecha actual
+	intval(date("H"));
+	$fechaActual=intval(date("H"));
+
+	//hora actual
+	$horaActual=intval(date("i"));
+	if($horaActual<10){
+		$horaActual="0".$horaActual;
+	}
+
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Gestión Audios</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=39" class="text-muted">Gestión Audios</a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" id="formulario" enctype="multipart/form-data">
+						 
+						<!--begin::Card-->
+						<div class="card card-custom mt-2 gutter-b" data-card="true">
+							<div class="card-header">
+								<h3 class="card-title">Gestión del audio</h3>
+								<div class="card-toolbar">
+									<!--begin::Button-->
+									
+									<!--end::Button-->
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+							</div>
+							<div class="card-body">
+								 <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandoSubidorFicheroAudios" style='display: none;'>
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<div class="row">
+									<div class="col-xl-2"></div>
+									<div class="col-xl-8">
+										<div class="my-5">
+											<h3 class=" text-dark font-weight-bold mb-10">Configura el audio:<span class="text-danger">*</span></h3>
+											<div class="form-group row">
+												<label class="col-3">Usuario:<span class="text-danger">*</span></label>
+												<div class="col-9">
+													<?php echo cargaUsuariosSubidoAudios($con);?>
+												</div>
+											</div>
+										</div>
+										<div class="separator separator-dashed my-10" style="border-bottom: 4px dashed #000000;"></div>
+										<div class="my-52">
+											<h3 class=" text-dark font-weight-bold mb-10">Grabar Audio:</h3>
+											<div class="form-group row">
+												<label class="col-3">Nombre del audio:<span class="text-danger">*</span></label>
+												<div class="col-9">
+													<input type="text" class="form-control" name="nombreAudioGrabar" id="nombreAudioGrabar" value="" placeholder="Nombre audio" maxlength="200"/>
+													<span class="form-text text-muted"><span class="text-danger">*</span>Obligatorio. Por favor introduce el nombre del audio.</span>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">Iniciar grabación:</label>
+												<div class="col-9">
+													
+													<audio autoplay id="audioGrabar" ></audio>
+													
+													<div type="button" class="btn btn-light-primary font-weight-bold btn-sm" id="grabarAudio" onclick="iniciarGrabacionAudio(this);">¡Iniciar Grabación!</div>
+													<div class="form-text text-muted mt-3">Pulsa para empezar la grabación de voz.</div>
+													<div class="text-danger" id="divTiempoGrabacionAudio" style="display: none;">Tiempo de grabación: <span class="text-danger" id="numTiempoGrabacionAudio">0</span> s</div>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">Terminar grabación:</label>
+												<div class="col-9">
+													<div type="button" class="btn btn-light-success font-weight-bold btn-sm" id="pararAudio">¡Finalizar Grabación! Y Subir Audio</div>
+													<div class="form-text text-muted mt-3">
+														Pulsa para finalizar la grabación de voz y subir el audio.
+													</div>
+													
+													<script src="./js/funaudios_record.js"></script>
+													
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">¿Cancelar grabación?:</label>
+												<div class="col-9">
+													<div type="button" class="btn btn-light-danger font-weight-bold btn-sm" id="cancelarGrabacion" onClick="location.reload();">¡Cancelar Grabación!</div>
+													<div class="form-text text-muted mt-3">
+														Pulsa para cancelar la grabación de voz.
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="separator separator-dashed my-10" style="border-bottom: 4px dashed #000000;"></div>
+										<div class="my-5">
+											<h3 class=" text-dark font-weight-bold mb-10">Convertir Texto a Audio:</h3>
+											<div class="form-group row">
+												<label class="col-3">Nombre del audio:<span class="text-danger">*</span></label>
+												<div class="col-9">
+													<input type="text" class="form-control" name="nombreAudioConvertir" id="nombreAudioConvertir" value="" placeholder="Nombre audio" maxlength="200"/>
+													<span class="form-text text-muted"><span class="text-danger">*</span>Obligatorio. Por favor introduce el nombre del audio.</span>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">Texto del audio:<span class="text-danger">*</span></label>
+												<div class="col-9">
+													<input type="text" class="form-control" name="textoAudio" id="textoAudio" value="" onKeyUp="mostrarOcultarSubidorAudio(this);" placeholder="Texto del audio a reproducir" maxlength="2500"/>
+													<span class="form-text text-muted">Por favor introduce el texto a reproducir. Máximo 2500 caracteres</span>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">Subir audio:</label>
+												<div class="col-9">
+													<div type="button" class="btn btn-light-success font-weight-bold btn-sm" onClick="subirFicheroAudio(2);">Subir Audio</div>
+												</div>
+											</div>
+										</div>
+										<div class="separator separator-dashed my-10" style="border-bottom: 4px dashed #000000;"></div>
+										<div class="my-52">
+											<h3 class=" text-dark font-weight-bold mb-10">Subir fichero Audio:</h3>
+											<div class="form-group row">
+												<label class="col-3">Nombre del audio:<span class="text-danger">*</span></label>
+												<div class="col-9">
+													<input type="text" class="form-control" name="nombreAudioSubir" id="nombreAudioSubir" value="" placeholder="Nombre audio" maxlength="200"/>
+													<span class="form-text text-muted"><span class="text-danger">*</span>Obligatorio. Por favor introduce el nombre del audio.</span>
+												</div>
+											</div>
+											<div class="form-group row" id="divSubidorFicheroAudio">
+												<label class="col-3">Selecciona audio:<span class="text-danger">*</span></label>
+												<div class="col-9">
+													<input type="file" class="form-control" name="file_upload" id="file_upload" value="" accept="audio/*"/>
+													<span class="form-text text-muted">Tamaño máximo 200MB y máximo un fichero de audio, formato 'mp3', 'wav', 'aac', 'ogg', 'webm'.</span>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">Subir audio:</label>
+												<div class="col-9">
+													<div type="button" class="btn btn-light-success font-weight-bold btn-sm" onClick="subirFicheroAudio(1);">Subir Audio</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2"></div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<div class="row">
+									<div class="col-xl-2"></div>
+									<div class="col-lg-8">
+										<!--<button type="reset" class="btn btn-success" onClick="subirFicheroAudio();">Convertir Audio / Subir Audio</button>-->
+										<!--<button type="reset" class="btn btn-secondary">Cancel</button>-->
+									</div>
+									<div class="col-xl-2"></div>
+								</div>
+							</div>
+						</div>
+						<!--end::Card-->
+						 
+						 
+						
+						<!--begin::Card-->
+						<div class="card card-custom mt-2 gutter-b" data-card="true">
+							<div class="card-header">
+								<h3 class="card-title">Archivos de Audios</h3>
+								<div class="card-toolbar">
+									
+									<!--begin::Button-->
+									
+									<!--end::Button-->
+                                    
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+							</div>
+							<div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-9 col-xl-8">
+											<div class="row align-items-center">
+												
+                                                
+											</div>
+										</div>
+									</div>
+								</div>
+                               
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaFicheroAudios">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaFicheroAudios">
+									<?php audiosSubidosList($con);?>
+								</table>
+								<!--end: Datatable-->
+							</div>
+						</div>
+						<!--end::Card-->
+						
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+
+<!-- start Modal lanzar audio-->
+<div class="modal fade" id="abrirProgramacionAudio" tabindex="-1" role="dialog" aria-labelledby="abrirProgramacionAudioLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="abrirProgramacionAudioLabel">Programar Audio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div class="container">
+						
+						 <div class="row mb-3" id="divDiaReproducirAudio">
+                            <p>¿Qué día quieres reproducir el audio?</p>
+                            <div class="col-md-12 text-center">
+								<input type="date" class="form-control " id="fechaReproducirAudio" value="<?php echo date("Y-m-d");?>" placeholder="Fecha Reproducir"/>
+                            </div>
+                        </div>
+						<div class="row mb-3">
+                            <p>¿Cuantas veces necesitas reproducir el audio?</p>
+                            <div class="col-md-12 text-center">
+								<input type="number" class="form-control " id="numReproduccionesAudio" value="2" onkeyup="comprobarNumReproducciones(this);" placeholder="Nº Reproducciones"/>
+                            </div>
+                        </div>
+                        <div class="row mb-3" id="divHoraReproducirAudio">
+                            <p>¿A qué hora desea que empiece?</p>
+                            <div class="col-md-12 text-center">
+                                <div class="row">
+                                    <div class="col-6 col-md-4 offset-md-2">
+                                        <label class="w-100">Horas</label>
+                                    </div>
+                                    <div class="col-6 col-md-4">
+                                        <label class="w-100">Minutos</label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 col-md-4 offset-md-2">
+                                        <div class="input-range-h btn-group-vertical">
+                                            <button class="plus far fa-plus-square btn btn-primary"></button>
+                                            <input style="text-align: center;font-size: 18px;" id="horaIniAudio" class="form-control hour-start" value="<?php echo $fechaActual;?>" type="number" min="00" max="23"> 
+                                            <button class="minus far fa-minus-square btn btn-primary"></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-6 col-md-4">
+                                        <div class="input-range-h btn-group-vertical">
+                                            <button class="plus far fa-plus-square btn btn-primary"></button>
+                                            <input style="text-align: center;font-size: 18px;" id="minIniAudio" class="form-control minute-start" value="<?php echo $horaActual;?>" type="number" min="00" max="59"> 
+                                            <button class="minus far fa-minus-square btn btn-primary"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<div class="row mb-3">
+                            <p>¿A qué nodos quieres enviar el audio?</p>
+                            <div class="col-md-12 text-center" id="divSeleccionarNodoCliente">
+								<?php cargaNodosAudiosCliente(0,$con);?>
+                            </div>
+                        </div>
+							
+                    </div>
+                </div>
+            <div class="modal-footer">
+				<input type="hidden" id="idAudioConf" value=""/>
+                <button type="button" id="btnReprodicirAhoraAudio" onClick="guardarProgramacionAudio(1);return false;" class="btn btn-warning font-weight-bold">Enviar ahora</button>
+                <button type="button" id="btnConfirmarReproducirAudio" onClick="guardarProgramacionAudio(2);return false;" class="btn btn-success font-weight-bold">Confirmar</button>
+                <button type="button" class="btn btn-danger font-weight-bold" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end Modal lanzar audio-->
+
+
+<script>
+    jQuery(document).ready(function() {
+		//tabla
+        var columnasTablaFicheros= [null,{ "width": "45%" },{ "width": "15%" },{ "width": "30%" },{ "width": "10%" }];
+        cargarTabla.init("tablaFicheroAudios",columnasTablaFicheros,[1, "asc"],50,true);
+		
+		//
+		$('button.plus').click(function(e){
+            e.preventDefault();
+            var parent = $(this).parent().find('input')[0];
+
+          if ($(parent).val() == parent.max) {
+            $(parent).val(parent.min);
+          } else {
+
+            $(this).parent().find('input')[0].stepUp();
+            if ($(this).parent().attr('class').length > 12) {
+              addZero($(this).parent().find('input')[0]);
+            }
+          }
+        });
+		
+        //
+        $('button.minus').click(function(e){
+            e.preventDefault();
+            var parent = $(this).parent().find('input')[0];
+
+            if ($(parent).val() == parent.min) {
+                $(parent).val(parent.max);
+            } else {
+                $(this).parent().find('input')[0].stepDown();
+
+            if ($(this).parent().attr('class').length > 12) {
+              addZero($(this).parent().find('input')[0]);
+            }
+          }
+        });
+		
+		
+    });
+	
+	
+</script>
+	
+<!--begin::Page Scripts(used by this page)-->
+<script src="assets/js/pages/crud/forms/widgets/select2.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		$('#kt_select2_3').select2();
+		$('#kt_select2_3').select2({
+         	placeholder: "Selecciona los nodos.",
+        });
+	 });
+</script>
+<!--end::Page Scripts-->

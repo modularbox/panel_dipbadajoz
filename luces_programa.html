@@ -1,0 +1,545 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$descripcion=quitaComillasD($_POST["descripcion"]);
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+
+		/*START recoger campos nombre foco*/
+		$colum1=substr(quitaComillasD($_POST["colum1"]), 0, 2);
+		$colum2=substr(quitaComillasD($_POST["colum2"]), 0, 2);
+		$colum3=substr(quitaComillasD($_POST["colum3"]), 0, 2);
+		$colum4=substr(quitaComillasD($_POST["colum4"]), 0, 2);
+		$colum5=substr(quitaComillasD($_POST["colum5"]), 0, 2);
+		$colum6=substr(quitaComillasD($_POST["colum6"]), 0, 2);
+		$colum7=substr(quitaComillasD($_POST["colum7"]), 0, 2);
+		$colum8=substr(quitaComillasD($_POST["colum8"]), 0, 2);
+		$colum9=substr(quitaComillasD($_POST["colum9"]), 0, 2);
+		$colum10=substr(quitaComillasD($_POST["colum10"]), 0, 2);
+		$colum11=substr(quitaComillasD($_POST["colum11"]), 0, 2);
+		$colum12=substr(quitaComillasD($_POST["colum12"]), 0, 2);
+		$colum13=substr(quitaComillasD($_POST["colum13"]), 0, 2);
+		$colum14=substr(quitaComillasD($_POST["colum14"]), 0, 2);
+		$colum15=substr(quitaComillasD($_POST["colum15"]), 0, 2);
+		$colum16=substr(quitaComillasD($_POST["colum16"]), 0, 2);
+		$colum17=substr(quitaComillasD($_POST["colum17"]), 0, 2);
+		$colum18=substr(quitaComillasD($_POST["colum18"]), 0, 2);
+		$colum19=substr(quitaComillasD($_POST["colum19"]), 0, 2);
+		$colum20=substr(quitaComillasD($_POST["colum20"]), 0, 2);
+		/*END recoger campos nombre foco*/
+
+		/*START recoger campos tipo foco*/
+		$tipoFocoColum1=intval(quitaComillasD($_POST["tipoFocoLuces_f1"]));
+		$tipoFocoColum2=intval(quitaComillasD($_POST["tipoFocoLuces_f2"]));
+		$tipoFocoColum3=intval(quitaComillasD($_POST["tipoFocoLuces_f3"]));
+		$tipoFocoColum4=intval(quitaComillasD($_POST["tipoFocoLuces_f4"]));
+		$tipoFocoColum5=intval(quitaComillasD($_POST["tipoFocoLuces_f5"]));
+		$tipoFocoColum6=intval(quitaComillasD($_POST["tipoFocoLuces_f6"]));
+		$tipoFocoColum7=intval(quitaComillasD($_POST["tipoFocoLuces_f7"]));
+		$tipoFocoColum8=intval(quitaComillasD($_POST["tipoFocoLuces_f8"]));
+		$tipoFocoColum9=intval(quitaComillasD($_POST["tipoFocoLuces_f9"]));
+		$tipoFocoColum10=intval(quitaComillasD($_POST["tipoFocoLuces_f10"]));
+		$tipoFocoColum11=intval(quitaComillasD($_POST["tipoFocoLuces_f11"]));
+		$tipoFocoColum12=intval(quitaComillasD($_POST["tipoFocoLuces_f12"]));
+		$tipoFocoColum13=intval(quitaComillasD($_POST["tipoFocoLuces_f13"]));
+		$tipoFocoColum14=intval(quitaComillasD($_POST["tipoFocoLuces_f14"]));
+		$tipoFocoColum15=intval(quitaComillasD($_POST["tipoFocoLuces_f15"]));
+		$tipoFocoColum16=intval(quitaComillasD($_POST["tipoFocoLuces_f16"]));
+		$tipoFocoColum17=intval(quitaComillasD($_POST["tipoFocoLuces_f17"]));
+		$tipoFocoColum18=intval(quitaComillasD($_POST["tipoFocoLuces_f18"]));
+		$tipoFocoColum19=intval(quitaComillasD($_POST["tipoFocoLuces_f19"]));
+		$tipoFocoColum20=intval(quitaComillasD($_POST["tipoFocoLuces_f20"]));
+		/*END recoger campos tipo foco*/
+
+
+		/*START recoger campos canales vacios foco, no dejar negativos*/
+		$vaciosFocoColum1=intval(quitaComillasD($_POST["columCanVacios_f1"]));
+		if($vaciosFocoColum1<0){
+			$vaciosFocoColum1=0;
+		}
+		$vaciosFocoColum2=intval(quitaComillasD($_POST["columCanVacios_f2"]));
+		if($vaciosFocoColum2<0){
+			$vaciosFocoColum2=0;
+		}
+		$vaciosFocoColum3=intval(quitaComillasD($_POST["columCanVacios_f3"]));
+		if($vaciosFocoColum3<0){
+			$vaciosFocoColum3=0;
+		}
+		$vaciosFocoColum4=intval(quitaComillasD($_POST["columCanVacios_f4"]));
+		if($vaciosFocoColum4<0){
+			$vaciosFocoColum4=0;
+		}
+		$vaciosFocoColum5=intval(quitaComillasD($_POST["columCanVacios_f5"]));
+		if($vaciosFocoColum5<0){
+			$vaciosFocoColum5=0;
+		}
+		$vaciosFocoColum6=intval(quitaComillasD($_POST["columCanVacios_f6"]));
+		if($vaciosFocoColum6<0){
+			$vaciosFocoColum6=0;
+		}
+		$vaciosFocoColum7=intval(quitaComillasD($_POST["columCanVacios_f7"]));
+		if($vaciosFocoColum7<0){
+			$vaciosFocoColum7=0;
+		}
+		$vaciosFocoColum8=intval(quitaComillasD($_POST["columCanVacios_f8"]));
+		if($vaciosFocoColum8<0){
+			$vaciosFocoColum8=0;
+		}
+		$vaciosFocoColum9=intval(quitaComillasD($_POST["columCanVacios_f9"]));
+		if($vaciosFocoColum9<0){
+			$vaciosFocoColum9=0;
+		}
+		$vaciosFocoColum10=intval(quitaComillasD($_POST["columCanVacios_f10"]));
+		if($vaciosFocoColum10<0){
+			$vaciosFocoColum10=0;
+		}
+		$vaciosFocoColum11=intval(quitaComillasD($_POST["columCanVacios_f11"]));
+		if($vaciosFocoColum11<0){
+			$vaciosFocoColum11=0;
+		}
+		$vaciosFocoColum12=intval(quitaComillasD($_POST["columCanVacios_f12"]));
+		if($vaciosFocoColum12<0){
+			$vaciosFocoColum12=0;
+		}
+		$vaciosFocoColum13=intval(quitaComillasD($_POST["columCanVacios_f13"]));
+		if($vaciosFocoColum13<0){
+			$vaciosFocoColum13=0;
+		}
+		$vaciosFocoColum14=intval(quitaComillasD($_POST["columCanVacios_f14"]));
+		if($vaciosFocoColum14<0){
+			$vaciosFocoColum14=0;
+		}
+		$vaciosFocoColum15=intval(quitaComillasD($_POST["columCanVacios_f15"]));
+		if($vaciosFocoColum15<0){
+			$vaciosFocoColum15=0;
+		}
+		$vaciosFocoColum16=intval(quitaComillasD($_POST["columCanVacios_f16"]));
+		if($vaciosFocoColum16<0){
+			$vaciosFocoColum16=0;
+		}
+		$vaciosFocoColum17=intval(quitaComillasD($_POST["columCanVacios_f17"]));
+		if($vaciosFocoColum17<0){
+			$vaciosFocoColum17=0;
+		}
+		$vaciosFocoColum18=intval(quitaComillasD($_POST["columCanVacios_f18"]));
+		if($vaciosFocoColum18<0){
+			$vaciosFocoColum18=0;
+		}
+		$vaciosFocoColum19=intval(quitaComillasD($_POST["columCanVacios_f19"]));
+		if($vaciosFocoColum19<0){
+			$vaciosFocoColum19=0;
+		}
+		$vaciosFocoColum20=intval(quitaComillasD($_POST["columCanVacios_f20"]));
+		if($vaciosFocoColum20<0){
+			$vaciosFocoColum20=0;
+		}
+		/*END recoger campos canales vacios foco*/
+
+
+		/*start num focos contratados/activos*/
+		$numfocos=quitaComillasD($_POST["numfocos"]);
+		if($numfocos>20){
+			$numfocos=20;
+		}else if($numfocos<0){
+			$numfocos=1;
+		}
+		/*end num focos contratados/activos*/
+
+
+		$tipoPrograma=intval(quitaComillasD($_POST["tipoPrograma"]));
+
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$datosUpdate=",idusuario=\"".$idusuario."\",numfocos=\"".$numfocos."\",tipofococolum1=\"".$tipoFocoColum1."\",tipofococolum2=\"".$tipoFocoColum2."\",tipofococolum3=\"".$tipoFocoColum3."\",tipofococolum4=\"".$tipoFocoColum4."\",tipofococolum5=\"".$tipoFocoColum5."\",tipofococolum6=\"".$tipoFocoColum6."\",tipofococolum7=\"".$tipoFocoColum7."\",tipofococolum8=\"".$tipoFocoColum8."\",tipofococolum9=\"".$tipoFocoColum9."\",tipofococolum10=\"".$tipoFocoColum10."\",tipofococolum11=\"".$tipoFocoColum11."\",tipofococolum12=\"".$tipoFocoColum12."\",tipofococolum13=\"".$tipoFocoColum13."\",tipofococolum14=\"".$tipoFocoColum14."\",tipofococolum15=\"".$tipoFocoColum15."\",tipofococolum16=\"".$tipoFocoColum16."\",tipofococolum17=\"".$tipoFocoColum17."\",tipofococolum18=\"".$tipoFocoColum18."\",tipofococolum19=\"".$tipoFocoColum19."\",tipofococolum20=\"".$tipoFocoColum20."\",vaciosfococolum1=\"".$vaciosFocoColum1."\",vaciosfococolum2=\"".$vaciosFocoColum2."\",vaciosfococolum3=\"".$vaciosFocoColum3."\",vaciosfococolum4=\"".$vaciosFocoColum4."\",vaciosfococolum5=\"".$vaciosFocoColum5."\",vaciosfococolum6=\"".$vaciosFocoColum6."\",vaciosfococolum7=\"".$vaciosFocoColum7."\",vaciosfococolum8=\"".$vaciosFocoColum8."\",vaciosfococolum9=\"".$vaciosFocoColum9."\",vaciosfococolum10=\"".$vaciosFocoColum10."\",vaciosfococolum11=\"".$vaciosFocoColum11."\",vaciosfococolum12=\"".$vaciosFocoColum12."\",vaciosfococolum13=\"".$vaciosFocoColum13."\",vaciosfococolum14=\"".$vaciosFocoColum14."\",vaciosfococolum15=\"".$vaciosFocoColum15."\",vaciosfococolum16=\"".$vaciosFocoColum16."\",vaciosfococolum17=\"".$vaciosFocoColum17."\",vaciosfococolum18=\"".$vaciosFocoColum18."\",vaciosfococolum19=\"".$vaciosFocoColum19."\",vaciosfococolum20=\"".$vaciosFocoColum20."\",idtipoprograma=\"".$tipoPrograma."\"";
+
+}
+
+   		//para la validación de campos obligatorios
+		if($nombre==""){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+			$guardado="s";
+
+			$patron="UPDATE luces_programas SET nombre=\"%s\",descripcion=\"%s\",colum1=\"%s\",colum2=\"%s\",colum3=\"%s\",colum4=\"%s\",colum5=\"%s\",colum6=\"%s\",colum7=\"%s\",colum8=\"%s\",colum9=\"%s\",colum10=\"%s\",colum11=\"%s\",colum12=\"%s\",colum13=\"%s\",colum14=\"%s\",colum15=\"%s\",colum16=\"%s\",colum17=\"%s\",colum18=\"%s\",colum19=\"%s\",colum20=\"%s\",guardado=\"s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron,$nombre,$descripcion,$colum1,$colum2,$colum3,$colum4,$colum5,$colum6,$colum7,$colum8,$colum9,$colum10,$colum11,$colum12,$colum13,$colum14,$colum15,$colum16,$colum17,$colum18,$colum19,$colum20,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1124345877990");
+		}
+
+		$titulof="EDICIÓN DE PROGRAMA";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,guardado,idusuario,descripcion,colum1,colum2,colum3,colum4,colum5,colum6,colum7,colum8,colum9,colum10,colum11,colum12,colum13,colum14,colum15,colum16,colum17,colum18,colum19,colum20,numfocos,tipofococolum1,tipofococolum2,tipofococolum3,tipofococolum4,tipofococolum5,tipofococolum6,tipofococolum7,tipofococolum8,tipofococolum9,tipofococolum10,tipofococolum11,tipofococolum12,tipofococolum13,tipofococolum14,tipofococolum15,tipofococolum16,tipofococolum17,tipofococolum18,tipofococolum19,tipofococolum20 ,vaciosfococolum1,vaciosfococolum2,vaciosfococolum3,vaciosfococolum4,vaciosfococolum5,vaciosfococolum6,vaciosfococolum7,vaciosfococolum8,vaciosfococolum9,vaciosfococolum10,vaciosfococolum11,vaciosfococolum12,vaciosfococolum13,vaciosfococolum14,vaciosfococolum15,vaciosfococolum16,vaciosfococolum17,vaciosfococolum18,vaciosfococolum19,vaciosfococolum20,idtipoprograma FROM luces_programas WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 12337765544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$guardado=$fila[1];
+			$idusuario=$fila[2];
+			$descripcion=$fila[3];
+
+			/*START mostrar campos nombre foco*/
+			$colum1=$fila[4];
+			$colum2=$fila[5];
+			$colum3=$fila[6];
+			$colum4=$fila[7];
+			$colum5=$fila[8];
+			$colum6=$fila[9];
+			$colum7=$fila[10];
+			$colum8=$fila[11];
+			$colum9=$fila[12];
+			$colum10=$fila[13];
+			$colum11=$fila[14];
+			$colum12=$fila[15];
+			$colum13=$fila[16];
+			$colum14=$fila[17];
+			$colum15=$fila[18];
+			$colum16=$fila[19];
+			$colum17=$fila[20];
+			$colum18=$fila[21];
+			$colum19=$fila[22];
+			$colum20=$fila[23];
+			/*END mostrar campos nombre foco*/
+		
+			$numfocos=$fila[24];
+			
+			/*START recoger campos tipo foco*/
+			$tipoFocoColum1=$fila[25];
+			$tipoFocoColum2=$fila[26];
+			$tipoFocoColum3=$fila[27];
+			$tipoFocoColum4=$fila[28];
+			$tipoFocoColum5=$fila[29];
+			$tipoFocoColum6=$fila[30];
+			$tipoFocoColum7=$fila[31];
+			$tipoFocoColum8=$fila[32];
+			$tipoFocoColum9=$fila[33];
+			$tipoFocoColum10=$fila[34];
+			$tipoFocoColum11=$fila[35];
+			$tipoFocoColum12=$fila[36];
+			$tipoFocoColum13=$fila[37];
+			$tipoFocoColum14=$fila[38];
+			$tipoFocoColum15=$fila[39];
+			$tipoFocoColum16=$fila[40];
+			$tipoFocoColum17=$fila[41];
+			$tipoFocoColum18=$fila[42];
+			$tipoFocoColum19=$fila[43];
+			$tipoFocoColum20=$fila[44];
+			/*END recoger campos tipo foco*/
+
+			/*START recoger campos canales vacios foco*/
+			$vaciosFocoColum1=$fila[45];
+			$vaciosFocoColum2=$fila[46];
+			$vaciosFocoColum3=$fila[47];
+			$vaciosFocoColum4=$fila[48];
+			$vaciosFocoColum5=$fila[49];
+			$vaciosFocoColum6=$fila[50];
+			$vaciosFocoColum7=$fila[51];
+			$vaciosFocoColum8=$fila[52];
+			$vaciosFocoColum9=$fila[53];
+			$vaciosFocoColum10=$fila[54];
+			$vaciosFocoColum11=$fila[55];
+			$vaciosFocoColum12=$fila[56];
+			$vaciosFocoColum13=$fila[57];
+			$vaciosFocoColum14=$fila[58];
+			$vaciosFocoColum15=$fila[59];
+			$vaciosFocoColum16=$fila[60];
+			$vaciosFocoColum17=$fila[61];
+			$vaciosFocoColum18=$fila[62];
+			$vaciosFocoColum19=$fila[63];
+			$vaciosFocoColum20=$fila[64];
+			/*END recoger campos canales vacios foco*/
+
+
+			$tipoPrograma=$fila[65];
+	
+
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE PROGRAMA";
+          }else{
+
+			$nombre="";
+			$idusuario=0;
+			$descripcion="";
+
+			/*START declarar campos nombre foco*/
+			$colum1="1";
+			$colum2="2";
+			$colum3="3";
+			$colum4="4";
+			$colum5="5";
+			$colum6="6";
+			$colum7="7";
+			$colum8="8";
+			$colum9="9";
+			$colum10="10";
+			$colum11="11";
+			$colum12="12";
+			$colum13="13";
+			$colum14="14";
+			$colum15="15";
+			$colum16="16";
+			$colum17="17";
+			$colum18="18";
+			$colum19="19";
+			$colum20="20";
+			/*END declarar campos nombre foco*/
+
+			$numfocos=16;
+
+			/*START recoger campos tipo foco*/
+			$tipoFocoColum1=0;
+			$tipoFocoColum2=0;
+			$tipoFocoColum3=0;
+			$tipoFocoColum4=0;
+			$tipoFocoColum5=0;
+			$tipoFocoColum6=0;
+			$tipoFocoColum7=0;
+			$tipoFocoColum8=0;
+			$tipoFocoColum9=0;
+			$tipoFocoColum10=0;
+			$tipoFocoColum11=0;
+			$tipoFocoColum12=0;
+			$tipoFocoColum13=0;
+			$tipoFocoColum14=0;
+			$tipoFocoColum15=0;
+			$tipoFocoColum16=0;
+			$tipoFocoColum17=0;
+			$tipoFocoColum18=0;
+			$tipoFocoColum19=0;
+			$tipoFocoColum20=0;
+			/*END recoger campos tipo foco*/
+
+
+			/*START recoger campos canales vacios foco*/
+			$vaciosFocoColum1=0;
+			$vaciosFocoColum2=0;
+			$vaciosFocoColum3=0;
+			$vaciosFocoColum4=0;
+			$vaciosFocoColum5=0;
+			$vaciosFocoColum6=0;
+			$vaciosFocoColum7=0;
+			$vaciosFocoColum8=0;
+			$vaciosFocoColum9=0;
+			$vaciosFocoColum10=0;
+			$vaciosFocoColum11=0;
+			$vaciosFocoColum12=0;
+			$vaciosFocoColum13=0;
+			$vaciosFocoColum14=0;
+			$vaciosFocoColum15=0;
+			$vaciosFocoColum16=0;
+			$vaciosFocoColum17=0;
+			$vaciosFocoColum18=0;
+			$vaciosFocoColum19=0;
+			$vaciosFocoColum20=0;
+			/*END recoger campos canales vacios foco*/
+
+
+			$sequence="";
+			$tipoPrograma=0;
+			$guardado="n";
+			
+
+			
+			$patron="INSERT INTO luces_programas SET nombre=\"\",idusuario=\"%s\",descripcion=\"%s\",colum1=\"%s\",colum2=\"%s\",colum3=\"%s\",colum4=\"%s\",colum5=\"%s\",colum6=\"%s\",colum7=\"%s\",colum8=\"%s\",colum9=\"%s\",colum10=\"%s\",colum11=\"%s\",colum12=\"%s\",colum13=\"%s\",colum14=\"%s\",colum15=\"%s\",colum16=\"%s\",colum17=\"%s\",colum18=\"%s\",colum19=\"%s\",colum20=\"%s\",numfocos=\"%s\",sequence=\"\",tipofococolum1=\"%s\",tipofococolum2=\"%s\",tipofococolum3=\"%s\",tipofococolum4=\"%s\",tipofococolum5=\"%s\",tipofococolum6=\"%s\",tipofococolum7=\"%s\",tipofococolum8=\"%s\",tipofococolum9=\"%s\",tipofococolum10=\"%s\",tipofococolum11=\"%s\",tipofococolum12=\"%s\",tipofococolum13=\"%s\",tipofococolum14=\"%s\",tipofococolum15=\"%s\",tipofococolum16=\"%s\",tipofococolum17=\"%s\",tipofococolum18=\"%s\",tipofococolum19=\"%s\",tipofococolum20=\"%s\",idtipoprograma=0,guardado=\"n\",fechaalta=\"%s\"";
+			$sql=sprintf($patron,$idusuario,$descripcion,$colum1,$colum2,$colum3,$colum4,$colum5,$colum6,$colum7,$colum8,$colum9,$colum10,$colum11,$colum12,$colum13,$colum14,$colum15,$colum16,$colum17,$colum18,$colum19,$colum20,$numfocos,$tipoFocoColum1,$tipoFocoColum2,$tipoFocoColum3,$tipoFocoColum4,$tipoFocoColum5,$tipoFocoColum6,$tipoFocoColum7,$tipoFocoColum8,$tipoFocoColum9,$tipoFocoColum10,$tipoFocoColum11,$tipoFocoColum12,$tipoFocoColum13,$tipoFocoColum14,$tipoFocoColum15,$tipoFocoColum16,$tipoFocoColum17,$tipoFocoColum18,$tipoFocoColum19,$tipoFocoColum20,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 13346675763");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM luces_programas WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 14343456663");
+
+			$titulof="NUEVO PROGRAMA";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=11');</script>");
+		printf("<script>cargaLocation('index.php?s=12&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Programas Luces</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted">Programas Luces</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',7,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=12<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información del Programa</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nombre:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="nombre" maxlength="65"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+										<?php echo cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Número de Focos:</label>
+										<input type="number" maxlength="2" class="form-control <?php if($_SESSION["permisossession"]!=1){echo "inputReadOnly";}?>" name="numfocos" value="<?php echo $numfocos;?>" <?php if($_SESSION["permisossession"]!=1){echo "readonly";}?> placeholder="16" />
+									</div>
+									<div class="col-lg-6">
+										<label>Tipo programa predefinido (Web luces):</label>
+										<?php echo cargaTipoProgramasPreGenerico($tipoPrograma,"tipoPrograma",$faltacampo,$con);?>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Observaciones:</label>
+										<input type="text" class="form-control" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" maxlength="140"/>
+									</div>
+								</div>
+							</div>
+                        </div>
+						<!--end::Card-->
+						
+						
+						<!--begin::Card-->
+						<div class="card card-custom mt-2 gutter-b card-collapsed" data-card="true">
+							<div class="card-header">
+								<h3 class="card-title">Configuración Nombre</h3>
+								<div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+							</div>
+							<!--begin::div-Form-->
+							<!--<form class="form">-->
+								<div class="card-body">
+									<?php echo pintarFocosProgramas($id,$con);?>
+								</div>
+							<!--</form>-->
+							<!--end::div-Form-->
+						</div>
+						<!--end::Card-->
+						 
+						 
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración Secuencia</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                               <!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaConfigPrograma">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaConfigPrograma">
+									<?php configuracionProgramaLuces($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-lg-6 d-flex position-relative w-80 px-lg-35 m-auto">
+                                        <div class="btn btn-primary btn-lg btn-block" onClick="crearLineaProgramaluces(<?php echo $id?>);">Añadir fila</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<!--end::Card-->
+						 
+						
+						
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+                         
+
+<script>
+    jQuery(document).ready(function() {
+		//tabla
+        var columnasTab= [null,{ "width": "2.5%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "4%" },{ "width": "7%" },{ "width": "5%" }];
+        cargarTabla.init("tablaConfigPrograma",columnasTab,[1, "asc"],50,true);
+    });
+</script>

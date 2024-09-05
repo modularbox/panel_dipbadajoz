@@ -1,0 +1,1086 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+		
+		//$conexion=quitaComillasD($_POST["conexion"]);
+		if(!isset($_POST["conexion"])){
+			$conexion="off";
+		}else{
+			$conexion=quitaComillasD($_POST["conexion"]);
+		}
+
+		$descripcion=quitaComillasD($_POST["descripcion"]);
+		
+		$email=quitaComillasD($_POST["email"]);
+		$ubicacion=quitaComillasD($_POST["ubicacion"]);
+        $l="n";
+        $m="n";
+        $x="n";
+        $j="n";
+        $v="n";
+        $s="n";
+        $d="n";
+        $defHoraDe=$_POST["defHoraDe"];
+        $defHoraHasta=$_POST["defHoraHasta"];
+
+		if(!isset($_POST["audio"])){
+			$audio="off";
+		}else{
+			$audio=quitaComillasD($_POST["audio"]);
+		}
+		
+
+
+        /*  on endendido
+            "" apagado
+        $l=$_POST["defLunes"];
+        $m=$_POST["defMartes"];
+        $x=$_POST["defMiercoles"];
+        $j=$_POST["defJueves"];
+        $v=$_POST["defViernes"];
+        $s=$_POST["defSabado"];
+        $d=$_POST["defDomingo"];*/
+
+        if(isset($_POST["defLunes"]) && $_POST["defLunes"]=="on"){
+            $l="s";
+        }else{
+			$l="n";
+		}
+        if(isset($_POST["defMartes"]) && $_POST["defMartes"]=="on"){
+            $m="s";
+        }else{
+			$m="n";
+		}
+        if(isset($_POST["defMiercoles"]) && $_POST["defMiercoles"]=="on"){
+            $x="s";
+        }else{
+			$x="n";
+		}
+        if(isset($_POST["defJueves"]) && $_POST["defJueves"]=="on"){
+            $j="s";
+        }else{
+			$j="n";
+		}
+        if(isset($_POST["defViernes"]) && $_POST["defViernes"]=="on"){
+            $v="s";
+        }else{
+			$v="n";
+		}
+        if(isset($_POST["defSabado"]) && $_POST["defSabado"]=="on"){
+            $s="s";
+        }else{
+			$s="n";
+		}
+        if(isset($_POST["defDomingo"]) && $_POST["defDomingo"]=="on"){
+            $d="s";
+        }else{
+			$d="n";
+		}
+
+		/*if($conexion=="on"){
+			$conexion=$conexion;
+		}else{
+			$conexion="off";
+		}*/
+
+		if($audio=="on"){
+			$audio=$audio;
+		}else{
+			$audio="off";
+		}
+
+		
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+
+			$token=quitaComillasD($_POST["token"]);
+			$internal=quitaComillasD($_POST["internal"]);
+			$versionPlaca=quitaComillasD($_POST["versionPlaca"]);
+			$versionSoftware=quitaComillasD($_POST["versionSoftware"]);
+			$idTeclado=intval(quitaComillasD($_POST["idTeclado"]));
+			$pinCandado=quitaComillasD($_POST["pinCandado"]);
+			$rpi=quitaComillasD($_POST["rpi"]);
+			$tipoRpi=intval(quitaComillasD($_POST["tipoRpi"]));
+			$numMicrosd=quitaComillasD($_POST["numMicrosd"]);
+			$obsComunicacionNodo=quitaComillasD($_POST["obsComunicacionNodo"]);
+			$numPcb=quitaComillasD($_POST["numPcb"]);
+			$tipoCerradura=intval(quitaComillasD($_POST["tipoCerradura"]));
+			$tipoArmario=quitaComillasD($_POST["tipoArmario"]);
+			$pinMantenimiento=quitaComillasD($_POST["pinMantenimiento"]);
+			$pinEventual=quitaComillasD($_POST["pinEventual"]);
+			$horainicioluz=quitaComillasD($_POST["horainicioluz"]);
+			$horafinluz=quitaComillasD($_POST["horafinluz"]);
+			$tipoFoco=quitaComillasD($_POST["tipoFoco"]);
+			$contactor=quitaComillasD($_POST["contactor"]);
+			$obsConfiguracionnNodo=quitaComillasD($_POST["obsConfiguracionnNodo"]);
+
+			$datosUpdate=",idusuario=\"".$idusuario."\",token=\"".$token."\",internal=\"".$internal."\",pincandado=\"".$pinCandado."\",rpi=\"".$rpi."\",tiporpi=\"".$tipoRpi."\",nummicrosd=\"".$numMicrosd."\",obscomunicacionnodo=\"".$obsComunicacionNodo."\",numpcb=\"".$numPcb."\",tipocerradura=\"".$tipoCerradura."\",tipoarmario=\"".$tipoArmario."\",pinmantenimiento=\"".$pinMantenimiento."\",pineventual=\"".$pinEventual."\",versionplaca=\"".$versionPlaca."\",versionsoftware=\"".$versionSoftware."\",idteclado=\"".$idTeclado."\",horainicioluz=\"".$horainicioluz."\",horafinluz=\"".$horafinluz."\",tipofoco=\"".$tipoFoco."\",contactor=\"".$contactor."\",obsconfiguracionnnodo=\"".$obsConfiguracionnNodo."\"";
+		}
+		
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $idusuario==0 || $email=="" ){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+			$guardado="s";
+
+			$patron="UPDATE safey_nodos SET nombre=\"%s\",descripcion=\"%s\",email=\"%s\",l=\"%s\",m=\"%s\",x=\"%s\",j=\"%s\",v=\"%s\",s=\"%s\",d=\"%s\",horaDe=\"%s\",horaHasta=\"%s\",guardado=\"s\",ubicacion=\"%s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron,$nombre,$descripcion,$email,$l,$m,$x,$j,$v,$s,$d,$defHoraDe,$defHoraHasta,$ubicacion,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1124345236638990");
+		}
+
+		$titulof="EDICIÓN DE NODO";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,conexion,guardado,descripcion,idusuario,token,internal,email,l,m,x,j,v,s,d,horaDe,horaHasta,ubicacion,versionplaca,versionsoftware,idteclado,pincandado,rpi,tiporpi,nummicrosd,obscomunicacionnodo,numpcb,tipocerradura,tipoarmario,pinmantenimiento,pineventual,horainicioluz,horafinluz,tipofoco,contactor,obsconfiguracionnnodo FROM safey_nodos WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 12336763365544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$conexion=$fila[1];
+			$guardado=$fila[2];
+			$descripcion=$fila[3];
+			$idusuario=$fila[4];
+			$token=$fila[5];
+			$internal=$fila[6];
+			$email=$fila[7];
+            $l=$fila[8];
+            $m=$fila[9];
+            $x=$fila[10];
+            $j=$fila[11];
+            $v=$fila[12];
+            $s=$fila[13];
+            $d=$fila[14];
+            $horaDe=$fila[15];
+            $horaHasta=$fila[16];
+			$ubicacion=$fila[17];
+			$audio="off";
+			$versionPlaca=$fila[18];
+			$versionSoftware=$fila[19];
+			$idTeclado=$fila[20];
+			$pinCandado=$fila[21];
+			$rpi=$fila[22];
+			$tipoRpi=$fila[23];
+			$numMicrosd=$fila[24];
+			$obsComunicacionNodo=$fila[25];
+			$numPcb=$fila[26];
+			$tipoCerradura=$fila[27];			
+			$tipoArmario=$fila[28];
+			$pinMantenimiento=$fila[29];
+			$pinEventual=$fila[30];
+			$horainicioluz=$fila[31];
+			$horafinluz=$fila[32];
+			$tipoFoco=$fila[33];
+			$contactor=$fila[34];
+			$obsConfiguracionnNodo=$fila[35];
+
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE NODO";
+          }else{
+
+			$nombre="";
+			$estado="off";
+			$descripcion="";
+			$idusuario=0;
+			$token=creaCompruebaTokenUsado("","safey_nodos",$con);
+			$internal="";
+			$email="";
+			$ultimaconexion=date("Y-m-d");
+			$horaultimaconexion=date("H:i:s");
+			$ubicacion="";
+			$audio="off";
+			$guardado="n";
+			$conexion="off";
+			$versionPlaca="";
+            $l="n";
+            $m="n";
+            $x="n";
+            $j="n";
+            $v="n";
+            $s="n";
+            $d="n";
+			$versionSoftware="";
+			$idTeclado=0;
+			$pinCandado="";
+			$rpi="";
+			$tipoRpi=0;
+			$numMicrosd="";
+			$obsComunicacionNodo="";
+			$numPcb="";
+			$tipoCerradura=0;			
+			$tipoArmario="";
+			$pinEventual="";
+			$pinMantenimiento="";
+			$horainicioluz="00:00:00";
+			$horafinluz="00:00:00";
+			$tipoFoco="";
+			$contactor="";
+			$obsConfiguracionnNodo="";
+			
+			$patron="INSERT INTO safey_nodos SET nombre=\"\",conexion=\"\",descripcion=\"\",guardado=\"n\",idusuario=\"%s\",token=\"%s\",internal=\"\",email=\"\",ultimaconexion=\"%s\",horaultimaconexion=\"%s\",fechaalta=\"%s\",salidaunomodo=\"a\",salidaunomanualactivado=\"off\",salidadosmodo=\"a\",salidadosmanualactivado=\"off\", salidatresmodo=\"a\",salidatresmanualactivado=\"off\",salidacuatromodo=\"a\",salidacuatromanualactivado=\"off\",salidacincomodo=\"a\",salidacincomanualactivado=\"off\",salidaseismodo=\"a\",salidaseismanualactivado=\"off\"";
+			$sql=sprintf($patron,$idusuario,$token,$ultimaconexion,$horaultimaconexion,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1345634576399");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM safey_nodos WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 14343576363");
+
+			$titulof="NUEVO NODO";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=15');</script>");
+		//printf("<script>cargaLocation('index.php?s=16&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=15" class="text-muted">Safey</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',14,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+                <div class="btn btn-warning mr-2" style="margin-left: 5px;" onClick="cargaLocation('index.php?s=34&i=<?php echo $id;?>');">Ir a Automatizacón</div>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=16<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Gestión Puertas</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-9 col-xl-8">
+											<?php if($_SESSION["permisossession"]==1){?>
+											<div class="row align-items-center">
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Nombre:</label>
+														<input type="text" class="form-control" id="nombrePuertaNew" value="" maxlength="65" placeholder="Nombre"/>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Url (Emergencia):</label>
+														<input type="text" class="form-control" id="urlEmergenciaPuertaNew" value="" maxlength="255" placeholder="Url (Emergencia)"/>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">SubidorImg:</label>
+														<input type="text" class="form-control" id="imgSubidor" value="" placeholder="SubidorImg"/>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="anadirPuertaNodoSafey('<?php echo $id;?>');return false;">Añadir</a>
+												</div>
+											</div>
+											<?php }?>
+										</div>
+									</div>
+								</div>
+								<!--end::Search Form-->
+								<div id="divImgSafeyNodo"><?php echo cargaPuertasNodoSafey($id,$con);?></div>
+                            </div>
+                        </div>
+						<!--end::Card-->
+						
+						<?php if($_SESSION["permisossession"]!=3){?>
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Conexión:<span class="text-danger">*</span></label>
+										<input data-switch="true" type="checkbox" name="conexion" <?php if($conexion=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+									</div>
+                                    <div class="col-lg-6">
+										<label>Audio:<span class="text-danger">*</span></label>
+										<input data-switch="true" type="checkbox" name="audio" <?php if($audio=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger" readonly/>
+									</div>
+                                    
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+										<?php echo cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+									</div>
+                                    <div class="col-lg-6">
+										<label>Email:</label>
+										<input type="text" class="form-control <?php if($faltacampo && $email==""){echo "is-invalid";}?>" name="email" value="<?php echo $email;?>" placeholder="Email" maxlength="65"/>
+									</div>	
+								</div>
+								<div class="form-group row">
+                                    <div class="col-lg-6">
+										<label>Nombre:<span class="text-danger">*</span></label>
+										<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" maxlength="65"/>
+										<span class="form-text text-muted">Por favor introduce el nombre del nodo.</span>
+									</div>
+									<div class="col-lg-6">
+										<label>Ubicación:</label>
+										<input type="text" class="form-control" name="ubicacion" value="<?php echo $ubicacion;?>" placeholder="Ubicación" maxlength="65"/>
+									</div>
+
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Observaciones:</label>
+										<input type="text" class="form-control" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" maxlength="180"/>
+									</div>
+								</div>
+                                <div class="form-group">
+                                    <label>Configuración por defecto</label>
+                                    <div class="checkbox-inline">
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($l=="s"){echo "checked='checked'";}?> name="defLunes" id="defLunes">
+                                        <span></span>Lunes</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($m=="s"){echo "checked='checked'";}?> name="defMartes" id="defMartes">
+                                        <span></span>Martes</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($x=="s"){echo "checked='checked'";}?> name="defMiercoles" id="defMiercoles">
+                                        <span></span>Miércoles</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($j=="s"){echo "checked='checked'";}?> name="defJueves" id="defJueves">
+                                        <span></span>Jueves</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($v=="s"){echo "checked='checked'";}?> name="defViernes" id="defViernes">
+                                        <span></span>Viernes</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($s=="s"){echo "checked='checked'";}?> name="defSabado" id="defSabado">
+                                        <span></span>Sábado</label>
+
+                                        <label class="checkbox checkbox-lg">
+                                        <input type="checkbox" <?php if($d=="s"){echo "checked='checked'";}?> name="defDomingo" id="defDomingo">
+                                        <span></span>Domingo</label>
+
+                                        <label class="checkbox-lg" style="margin-right: 10px">
+                                        <input type="time" class="form-control" value="<?php echo $horaDe;?>" name="defHoraDe" id="defHoraDe">
+                                        <span></span></label>
+
+                                        <label class="checkbox-lg">
+                                        <input type="time" class="form-control" value="<?php echo $horaHasta;?>" name="defHoraHasta" id="defHoraHasta">
+                                        <span></span></label>                                                     
+
+                                    </div>
+                                    <span class="form-text text-muted">Los días seleccionados estarán por defecto al dar de alta</span>
+                                </div>
+							</div>
+                            
+                        </div>
+						 <?php }?>
+						<!--end::Card-->
+	
+                        <!--begin::Card-->
+						<?php if($_SESSION["permisossession"]==1){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Comunicación del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<?php if($_SESSION["permisossession"]==1){?>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Token:</label>
+										<input type="text" class="form-control" name="token" value="<?php echo $token;?>" placeholder="Token" />
+									</div>
+									<div class="col-lg-6">
+										<label>Descripción (RemoteIot):</label>
+										<input type="text" class="form-control <?php if($faltacampo && $internalRepetido){echo "is-invalid";}?>" name="internal" value="<?php echo $internal;?>" placeholder="Internal" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nº PCB:</label>
+										<input type="text" class="form-control" name="numPcb" value="<?php echo $numPcb;?>" placeholder="Nº PCB" />
+									</div>
+									<div class="col-lg-6">
+										<label>Versión PCB:</label>
+										<input type="text" class="form-control" name="versionPlaca" value="<?php echo $versionPlaca;?>" placeholder="Versión Placa" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nº RPi:</label>
+										<input type="text" class="form-control" name="rpi" value="<?php echo $rpi;?>" placeholder="Nº RPI" />
+									</div>
+									<div class="col-lg-6">
+										<label>Tipo Rpi:</label>
+										<?php echo cargaModelosRPIGenerico($tipoRpi,"tipoRpi",$faltacampo,$con);?>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nº MicroSD:</label>
+										<input type="text" class="form-control" name="numMicrosd" value="<?php echo $numMicrosd;?>" placeholder="Nº MicroSD" maxlength="80" />
+									</div>
+									<div class="col-lg-6">
+										<label>Versión Software:</label>
+										<input type="text" class="form-control" name="versionSoftware" value="<?php echo $versionSoftware;?>" placeholder="Versión Software" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Observaciones:</label>
+										<input type="text" class="form-control" name="obsComunicacionNodo" value="<?php echo $obsComunicacionNodo;?>" placeholder="Observaciones" maxlength="180"/>
+									</div>
+								</div>
+								<?php }?>
+                            </div>
+                        </div>
+						<?php }?>
+						<!--end::Card-->
+				
+						 
+						<!--begin::Card-->
+						<?php if($_SESSION["permisossession"]!=3){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<?php if($_SESSION["permisossession"]==1){?>
+								
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Teclado:</label>
+										<?php echo cargaTecladosSafey($idTeclado,"idTeclado",$con);?>
+									</div>
+									<div class="col-lg-6">
+										<label>Cerradura:</label>
+										<?php echo cargaTiposCerraduraGenerico($tipoCerradura,"tipoCerradura",$faltacampo,$con);?>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Tipo Armario:</label>
+										<input type="text" class="form-control" name="tipoArmario" value="<?php echo $tipoArmario;?>" placeholder="Tipo Armario" />
+									</div>
+									<div class="col-lg-6">
+										<label>Pin candado:</label>
+										<input type="text" class="form-control" name="pinCandado" value="<?php echo $pinCandado;?>" placeholder="Pin Candado" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Pin Mantenimiento:</label>
+										<input type="text" class="form-control" name="pinMantenimiento" value="<?php echo $pinMantenimiento;?>" placeholder="Pin Mantenimiento" maxlength="65" <?php if($_SESSION["permisossession"]!=1){echo "readonly";}?>/>
+										<span class="form-text text-muted">Pin para la pista en modo mantenimiento.</span>
+									</div>
+									<div class="col-lg-6">
+										<label>Pin Eventual:</label>
+										<input type="text" class="form-control" name="pinEventual" value="<?php echo $pinEventual;?>" placeholder="Pin Partida" maxlength="65" <?php if($_SESSION["permisossession"]!=1){echo "readonly";}?>/>
+										<span class="form-text text-muted">Pin para la pista en modo partida.</span>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Hora Inicio de Luz:</label>
+										<input type="time" class="form-control " name="horainicioluz" value="<?php echo $horainicioluz;?>" placeholder="Hora Inicio Luz" maxlength="65"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Hora Fin de Luz:</label>
+										<input type="time" class="form-control " name="horafinluz" value="<?php echo $horafinluz;?>" placeholder="Hora Fin Luz" maxlength="65"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">tipoFoco
+										<label>Tipo Foco:</label>
+										<?php echo cargaTiposFocoGenerico($tipoFoco,"tipoFoco",$faltacampo,$con);?>
+									</div>
+									<div class="col-lg-6">
+										<label>Contactor:</label>
+										<input type="text" class="form-control " name="contactor" value="<?php echo $contactor;?>" placeholder="Contactor" maxlength="255"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-12">
+										<label>Observaciones:</label>
+										<input type="text" class="form-control" name="obsConfiguracionnNodo" value="<?php echo $obsConfiguracionnNodo;?>" placeholder="Observaciones" maxlength="180"/>
+									</div>
+								</div>
+								<?php }?>
+                            </div>
+                        </div>
+						<?php }?>
+						<!--end::Card-->
+						 
+						<!--begin::Card-->
+						<?php if($_SESSION["permisossession"]!=3){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Nodos Vinculados/Asociados</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<?php if($_SESSION["permisossession"]==1){?>
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-9 col-xl-8">
+											<div class="row align-items-center">
+												<div class="col-md-12 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Nodo:</label>
+														<div id="divSelectNodos"><?php echo cargaNodosSafeySelect($idusuario,$id,"nodoVinculadoSafey",$con);?></div>
+													   <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+											                <a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="anadirNodoVinculadoSafey(<?php echo $id;?>);return false;">Añadir</a>
+										              </div>
+                                                    </div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+						 		<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaNodosVinculados">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaNodosVinculados">
+									<?php nodosVinculadosSafey($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+						 
+								<?php }?>
+                            </div>
+                        </div>
+						<?php }?>
+						<!--end::Card-->
+						 
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial</h3>
+                                </div>
+                                
+                                <div class="card-toolbar">
+                                    <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                        
+                                        <li class="nav-item">
+											<label style="display: inherit;">Desde:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaIniHistorialPuertas" value="<?php echo $_SESSION["fechaIniHistorialPuertasSafey"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+											<label style="display: inherit;">Hasta:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaFinHistorialPuertas" value="<?php echo $_SESSION["fechaFinHistorialPuertasSafey"];?>"/>
+                                        </li>
+                                        
+                                        <li class="nav-item">
+                                            <?php echo cargaFiltroPuertasHistorial($id,$con);?>
+                                            
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="btn btn-info font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="filtrarHistorialPuertasSafey(<?php echo $id?>);">Aplicar
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="javascript: void(0)" class="btn btn-icon btn-sm btn-success mr-1 ml-3" data-placement="top" title="Descargar Excel" onClick="historialSafeyPuertas(<?php echo $id?>);" data-original-title="Exportar a Excel">
+                                                <i class="la la-file-excel-o"></i>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                                <i class="ki ki-arrow-down icon-nm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									
+								</div>
+								<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHistorialPuertas">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHistorialPuertas">
+									<?php puertasSafeyHistorial($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+				
+						<!--begin::Card-->
+						<?php if($_SESSION["permisossession"]!=3){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial Intentos Fallidos</h3>
+                                </div>
+                                
+                                <div class="card-toolbar">
+                                    <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                        
+                                        <li class="nav-item">
+											<label style="display: inherit;">Desde:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaIniHistorialFallidoPuertas" value="<?php echo $_SESSION["fechaIniHistorialFallidoPuertasSafey"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+											<label style="display: inherit;">Hasta:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaFinHistorialFallidoPuertas" value="<?php echo $_SESSION["fechaFinHistorialFallidoPuertasSafey"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <?php echo cargaFiltroPuertasHistorialFallido($id,$con);?>
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="btn btn-info font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="filtrarHistorialFallidoPuertasSafey(<?php echo $id?>);">Aplicar
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="javascript: void(0)" class="btn btn-icon btn-sm btn-success mr-1 ml-3" data-placement="top" title="Descargar Excel" onClick="historialFallidosSafeyPuertas(<?php echo $id?>);" data-original-title="Exportar a Excel">
+                                                <i class="la la-file-excel-o"></i>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                                <i class="ki ki-arrow-down icon-nm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									
+								</div>
+								<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHistorialFallidosPuertas">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHistorialFallidosPuertas">
+									<?php puertasSafeyHistorialFallidos($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<?php }?>
+						<!--end::Card--> 
+	
+						<!--begin::Card-->
+					   <?php if($_SESSION["permisossession"]!=3){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración Económica</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                            	<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-10 col-xl-10">
+											<div class="row align-items-center">
+												<div class="col-md-4 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Descripción:</label>
+														<input type="text" class="form-control" id="descripcionTarifa" placeholder="Descripción"/>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Tipo Servicio:</label>
+														<?php echo cargarTipoServicioPagos("","",$con);?>
+													</div>
+												</div>
+												<div class="col-md-2 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Precio €:</label>
+														<input type="number" class="form-control" id="precioTarifa" placeholder="Precio"/>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Tipo Reserva:</label>
+														<?php echo cargarTipoReservaPagos("","",$con);?>
+													</div>
+												</div>
+												
+											</div>
+										</div>
+										<div class="col-lg-2 col-xl-2 mt-5 mt-lg-0">
+											<a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="anadirTarifaNodo(<?php echo $id;?>);return false;">Añadir</a>
+										</div>
+									</div>
+								</div>
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaConfiguracionEconomica">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaConfiguracionEconomica">
+									<?php configuracionEconomicaNodo($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						 <?php }?>
+						<!--end::Card-->
+						 
+						 
+						 <!--begin::Card-->
+						 <?php if($_SESSION["permisossession"]!=3){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración Pagos</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                            	<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-9 col-xl-5">
+											<div class="row align-items-center">
+												<div class="col-md-12 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Método de Pago:</label>
+														<?php echo cargaTiposMetodosPago("","metodopago",$id,$con) ?>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-3 col-xl-5 mt-5 mt-lg-0">
+											<a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="añadirMetodoPago(<?php echo $id.','.$idusuario; ?>);return false;">Añadir</a>
+										</div>
+									</div>
+								</div>
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaConfiguracionPagos">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaConfiguracionPagos">
+									<?php configuracionMetodosPagosPuertasAccesos($id,$idusuario,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						 <?php }?>
+						<!--end::Card-->
+						 
+						<!--begin::Card-->
+						 <?php if($_SESSION["permisossession"]!=3){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración Códigos Promocionales</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                            	<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-10 col-xl-10">
+											<div class="row align-items-center">
+												<div class="col-md-6 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Cód. Promocional:</label>
+														<input type="text" class="form-control" id="codigopromocional" maxlength="65" placeholder="Código Promocional"/>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Tipo:</label>
+														<select class='form-control' name="tipocodpromo" id="tipocodpromo">
+															<option value='e'>€</option>
+															<option value='p'>%</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-md-3 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Cantidad:</label>
+														<input type="text" class="form-control" id="cantidadcodpromo" maxlength='3' placeholder="Cantidad"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-2 col-xl-2 mt-5 mt-lg-0">
+											<a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="añadirCodigoPromocional(<?php echo $id.','.$idusuario; ?>);return false;">Añadir</a>
+										</div>
+									</div>
+								</div>
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaConfiguracionCodigosPromo">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaConfiguracionCodigosPromo">
+									<?php configuracionCodigosPromoPuertasAccesos($id,$idusuario,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						 <?php }?>
+						<!--end::Card-->
+						 
+						 
+						<!--begin::Card-->
+						<?php if($_SESSION["permisossession"]==1){?>
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial De Pagos</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <ul class="nav nav-pills nav-pills-sm nav-dark-75">
+                                        
+                                        <li class="nav-item">
+											<label style="display: inherit;">Desde:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaIniHistorialPagos" value="<?php echo $_SESSION["fechaIniHistorialPagos"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+											<label style="display: inherit;">Hasta:</label>
+                                        </li>
+                                        <li class="nav-item">
+                                            <input class="form-control py-2 px-4" type="date" id="fechaFinHistorialPagos" value="<?php echo $_SESSION["fechaFinHistorialPagos"];?>"/>
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="btn btn-info font-weight-bolder font-size-sm ml-3 py-2 px-4" onClick="filtrarHistorialPagosSafeyNodo(<?php echo $id?>);">Aplicar
+                                            </div>
+                                        </li>
+										
+                                        <li class="nav-item">
+                                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                                <i class="ki ki-arrow-down icon-nm"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-12 col-xl-12">
+											<div class="row align-items-center">
+												
+											
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<!--end::Search Form-->
+								
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHistorialPagosNodo">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHistorialPagosNodo">
+									<?php pagosSafeyNodoHistorial($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						 <?php } ?>
+						<!--end::Card-->
+						 
+						 
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+
+<!--end::Global Theme Bundle-->
+
+<script>
+    jQuery(document).ready(function() {
+		
+		//tabla historial pagos
+        var columnasTabHistorialPagosNodo= [null,{ "width": "16%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" },{ "width": "12%" },{ "width": "10%" },{ "width": "10%" },{ "width": "10%" }];
+        cargarTabla.init("tablaHistorialPagosNodo",columnasTabHistorialPagosNodo,[1, "asc"],200,true);
+		
+		//tabla configuracion pagos
+        var columnasTabConfiguracionPagos= [null,{ "width": "80%" },{ "width": "20%" }];
+        cargarTabla.init("tablaConfiguracionPagos",columnasTabConfiguracionPagos,[0, "asc"],50,true);
+		
+		//tabla configuracion codigos promocionales
+        var columnasTabConfiguracionCodigosPromo= [null,{ "width": "55%" },{ "width": "15%" },{ "width": "15%" },{ "width": "15%" }];
+        cargarTabla.init("tablaConfiguracionCodigosPromo",columnasTabConfiguracionCodigosPromo,[0, "asc"],50,true);
+		
+		//tabla configuracion economica
+        var columnasTabConfiguracionEconomica= [null,{ "width": "18%" },{ "width": "13%" },{ "width": "10%" },{ "width": "15%" },{ "width": "19%" },{ "width": "10%" },{ "width": "15%" }];
+        cargarTabla.init("tablaConfiguracionEconomica",columnasTabConfiguracionEconomica,[0, "asc"],50,true);
+		
+		//tabla historial
+        var columnasTabHistorial= [null,{ "width": "15%" },{ "width": "15%" },{ "width": "20%" },{ "width": "15%" },{ "width": "15%" },{ "width": "15%" },{ "width": "10%" }];
+        cargarTabla.init("tablaHistorialPuertas",columnasTabHistorial,[1, "asc"],200,true);
+		
+		//tabla historial fallidos
+        var columnasTabHistorialFallidos= [null,{ "width": "15%" },{ "width": "15%" },{ "width": "20%" },{ "width": "15%" },{ "width": "15%" },{ "width": "15%" },{ "width": "10%" }];
+        cargarTabla.init("tablaHistorialFallidosPuertas",columnasTabHistorialFallidos,[1, "asc"],200,true);
+		
+		//NodosVinculados
+		var columnasTabNodosVinculados= [null,{ "width": "40%" },{ "width": "45%" },{ "width": "15%" }];
+        cargarTabla.init("tablaNodosVinculados",columnasTabNodosVinculados,[1, "asc"],50,true);
+    });
+</script>

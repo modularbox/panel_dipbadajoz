@@ -1,0 +1,122 @@
+.clickable {
+    cursor: pointer!important;
+}
+
+td.control,
+th.control {
+  position: relative;
+  cursor: pointer;
+}
+
+td.control:before {
+  top: 50%;
+  left: 50%;
+  height: 16px;
+  width: 16px;
+  margin-top: -10px;
+  margin-left: -10px;
+  display: block;
+  position: absolute;
+  color: white;
+  border: 2px solid white;
+  border-radius: 14px;
+  box-shadow: 0 0 3px #444;
+  box-sizing: content-box;
+  text-align: center;
+  text-indent: 0 !important;
+  line-height: 16px;
+  font-family: "Ki";
+  content: "";
+  background-color: #3699ff;
+  font-size: 11px;
+}
+
+@media screen and (max-width: 767px){
+    div.textoTablaCentrado{
+        text-align: center;
+    }
+}
+/*
+table.dataTable thead .sorting_asc {
+  background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+}
+table.dataTable thead .sorting_desc {
+  background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+}
+table.dataTable thead .sorting {
+  background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+}
+*/
+table.dataTable thead > tr > th {
+    padding-left: 30px !important;
+    padding-right: initial !important;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after {
+    left: 8px !important;
+    right: auto !important;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before {
+    left: 16px !important;
+    right: auto !important;
+}
+
+.cargadorBloque{
+    /*z-index: 1011;*/
+    z-index: 94;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    border: 0px;
+    cursor: wait;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.dz-remove
+{
+    display:inline-block !important;
+    width:1.2em;
+    height:1.2em;
+    
+    position:absolute;
+    top:5px;
+    right:5px;
+    z-index:1000;
+    
+    font-size:1.2em !important;
+    line-height:1em;
+   
+    text-align:center;
+    font-weight:bold;
+    border:1px solid gray !important;
+    border-radius:1.2em;
+    color:gray;
+    background-color:white;
+    opacity:.5;
+    
+}
+
+.dz-remove:hover
+{
+    text-decoration:none !important;
+    opacity:1;
+}
+
+.inputReadOnly{
+	background-color: #f3f6f9 !important;
+    opacity: 1;
+	cursor: not-allowed;
+}
+
+.dz-image > img{
+    object-fit: cover;
+    width: 120px;
+    height: 120px;
+}
+    

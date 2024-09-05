@@ -1,0 +1,221 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		//$idusuario=quitaComillasD($_POST["idusuario"]);
+		$relecuatrofrecuencia=quitaComillasD($_POST["relecuatrofrecuencia"]);
+		$relecuatroduracion=quitaComillasD($_POST["relecuatroduracion"]);
+		$relecincofrecuencia=quitaComillasD($_POST["relecincofrecuencia"]);
+		$relecincoduracion=quitaComillasD($_POST["relecincoduracion"]);
+		
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$idusuario=calculaIdEmpresa($con);
+			$datosUpdate=",idusuario=\"".$idusuario."\"";
+		}else{
+			$idusuario=calculaIdEmpresa($con);
+			$datosUpdate=",idusuario=\"".$idusuario."\"";
+		}
+		
+   		//para la validación de campos obligatorios
+		/*if($idusuario==0){
+			$completo=false;
+			$faltacampo=true;
+		}*/
+
+		if($completo){
+			$guardado="s";
+
+			$patron1="SELECT id FROM campanas_reloj WHERE idusuario=\"%s\" AND guardado=\"s\" AND borrado=\"n\"";
+			$sql1=sprintf($patron1,$idusuario);
+			$respuesta1=mysqli_query($con,$sql1) or die ("Error al buscar 3453567561111dfsdf343454511");
+			if(mysqli_num_rows($respuesta1)>0){
+				$fila1=mysqli_fetch_array($respuesta1);
+				$id=$fila1[0];
+
+				//editar el existente
+				$patron="UPDATE campanas_reloj SET relecuatrofrecuencia=\"%s\",relecuatroduracion=\"%s\",relecincofrecuencia=\"%s\",relecincoduracion=\"%s\"%s WHERE id=\"%s\"";
+				$sql=sprintf($patron,$relecuatrofrecuencia,$relecuatroduracion,$relecincofrecuencia,$relecincoduracion,$datosUpdate,$id);
+				$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 112433464527567637766638667876990");
+
+			}else{//crear la primera vez
+
+				$patron="INSERT INTO campanas_reloj SET relecuatrofrecuencia=\"%s\",relecuatroduracion=\"%s\",relecincofrecuencia=\"%s\",relecincoduracion=\"%s\",borrado=\"n\",guardado=\"s\",fechaalta=\"%s\"%s ";
+				$sql=sprintf($patron,$relecuatrofrecuencia,$relecuatroduracion,$relecincofrecuencia,$relecincoduracion,date("Y-m-d"),$datosUpdate);
+				$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 11243346452754454545467637766638667876990");
+
+				$id=mysqli_insert_id($con);
+			}
+			mysqli_free_result($respuesta1);
+		}
+
+		$titulof="EDICIÓN DE RELOJ";
+	}else{
+		
+		$idusuario=calculaIdEmpresa($con);
+
+		$patron1="SELECT id FROM campanas_reloj WHERE idusuario=\"%s\" AND guardado=\"s\" AND borrado=\"n\"";
+		$sql1=sprintf($patron1,$idusuario);
+		$respuesta1=mysqli_query($con,$sql1) or die ("Error al buscar 34535675343434361111dfsdf343454511");
+		if(mysqli_num_rows($respuesta1)>0){
+			$fila1=mysqli_fetch_array($respuesta1);
+			$id=$fila1[0];
+
+			$patron="SELECT relecuatrofrecuencia,relecuatroduracion,relecincofrecuencia,relecincoduracion,guardado,idusuario FROM campanas_reloj WHERE id=\"%s\"";
+			$sql=sprintf($patron,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1233674367665653663365544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$relecuatrofrecuencia=$fila[0];
+			$relecuatroduracion=$fila[1];
+			$relecincofrecuencia=$fila[2];
+			$relecincoduracion=$fila[3];
+			$guardado=$fila[4];
+			$idusuario=$fila[5];
+
+		}else{
+			//por defecto
+			$relecuatrofrecuencia=0;
+			$relecuatroduracion=0;
+			$relecincofrecuencia=0;
+			$relecincoduracion=0;
+			$idusuario=0;
+		}
+		mysqli_free_result($respuesta1);
+
+		$titulof="EDICIÓN DE RELOJ";
+
+		//borrar otros
+		$patron3="DELETE FROM campanas_reloj WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+		$sql3=sprintf($patron3,date("Y-m-d"));
+		$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 14343556556656445435657576363");
+          
+    }
+   
+	if($completo){
+		printf("<script>cargaLocation('index.php?s=30');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=28" class="text-muted">Campanas</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted">Reloj</a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				
+				
+				<?php }?>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=30" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Configuración de los relés frecuencia y duración</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<div class="form-group row">
+									<div class="col-lg-3">
+										<label>Relé 4 (Frecuencia segundos):</label>
+										<input type="number" class="form-control" name="relecuatrofrecuencia" value="<?php echo $relecuatrofrecuencia;?>" placeholder="Frecuencia"/>
+									</div>
+									<div class="col-lg-3">
+										<label>Relé 4 (Duración segundos):</label>
+										<input type="number" class="form-control" name="relecuatroduracion" value="<?php echo $relecuatroduracion;?>" placeholder="Duración"/>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+                                    <div class="col-lg-3">
+										<label>Relé 5 (Frecuencia segundos):</label>
+										<input type="number" class="form-control" name="relecincofrecuencia" value="<?php echo $relecincofrecuencia;?>" placeholder="Frecuencia"/>
+									</div>
+									<div class="col-lg-3">
+										<label>Relé 5 (Duración segundos):</label>
+										<input type="number" class="form-control" name="relecincoduracion" value="<?php echo $relecincoduracion;?>" placeholder="Duración"/>
+									</div>
+								</div>
+								
+							</div>
+                        </div>
+						<!--end::Card-->
+						 
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+
+<!--end para esta pagina switch-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+
+<!--end::Global Theme Bundle-->
+
+<script>
+    jQuery(document).ready(function() {
+		
+        
+    });
+</script>

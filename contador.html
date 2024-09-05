@@ -1,0 +1,813 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+		$conexion=quitaComillasD($_POST["conexion"]);
+		$descripcion=quitaComillasD($_POST["descripcion"]);
+		$token=quitaComillasD($_POST["token"]);
+		$internal=quitaComillasD($_POST["internal"]);
+		$tipo=quitaComillasD($_POST["tipo"]);
+		$coordenadas=quitaComillasD($_POST["coordenadas"]);
+		$ubicacion=quitaComillasD($_POST["ubicacion"]);
+		$uid=quitaComillasD($_POST["uid"]);
+		$zonanodo=quitaComillasD($_POST["zonanodo"]);
+		$depositovinculado=quitaComillasD($_POST["depositovinculado"]);
+		$contadorvinculado=quitaComillasD($_POST["contadorvinculado"]);
+		$email=quitaComillasD($_POST["email"]);
+		$clientefinal=quitaComillasD($_POST["clientefinal"]);
+		$nif=quitaComillasD($_POST["nif"]);
+		$direccioncliente=quitaComillasD($_POST["direccioncliente"]);
+		$formapago=quitaComillasD($_POST["formapago"]);
+		$fechainstalacion=quitaComillasD($_POST["fechainstalacion"]);
+		$instalador=quitaComillasD($_POST["instalador"]);
+		$numserie=quitaComillasD($_POST["numserie"]);
+		$metricacontador=quitaComillasD($_POST["metricacontador"]);
+		$marca=quitaComillasD($_POST["marca"]);
+		$modelo=quitaComillasD($_POST["modelo"]);
+		$apellidoscliente=quitaComillasD($_POST["apellidoscliente"]);
+		$cpcliente=quitaComillasD($_POST["cpcliente"]);
+		$localidadcliente=quitaComillasD($_POST["localidadcliente"]);
+		$provinciacliente=quitaComillasD($_POST["provinciacliente"]);
+		$telefonocliente=quitaComillasD($_POST["telefonocliente"]);
+		$emailcliente=quitaComillasD($_POST["emailcliente"]);
+		$litrosporpulsos=quitaComillasD($_POST["litrosporpulsos"]);
+		$ajuste=quitaComillasD($_POST["ajuste"]);
+		$m3notidiarios=quitaComillasD($_POST["m3notidiarios"]);
+		$m3notimail=quitaComillasD($_POST["m3notimail"]);
+		$horaconsumonotifi=quitaComillasD($_POST["horaconsumonotifi"]);
+		$mhoraconsumonotifi=quitaComillasD($_POST["mhoraconsumonotifi"]);
+		$diasnoactividadnotifi=quitaComillasD($_POST["diasnoactividadnotifi"]);
+		$mdiasnoactividadnotifi=quitaComillasD($_POST["mdiasnoactividadnotifi"]);
+		$bateria=quitaComillasD($_POST["bateria"]);
+		$m3notisemanales=quitaComillasD($_POST["m3notisemanales"]);
+		$m3notimensuales=quitaComillasD($_POST["m3notimensuales"]);
+		$m3notianuales=quitaComillasD($_POST["m3notianuales"]);
+
+		if($conexion=="on"){
+			$conexion=$conexion;
+		}else{
+			$conexion="off";
+		}
+
+		//crear carpetas
+		if($guardado=="n"){
+			creardir($id,"modular/panel/archivos_subidos/clientes/");
+		}
+
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$datosUpdate=",idusuario=\"".$idusuario."\",token=\"".$token."\",internal=\"".$internal."\",uid=\"".$uid."\",zonanodo=\"".$zonanodo."\",litrosporpulsos=\"".$litrosporpulsos."\"";
+		}
+
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $idusuario==0 || $tipo==0){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+			$guardado="s";
+
+			$patron="UPDATE contadores_nodos SET nombre=\"%s\",conexion=\"%s\",descripcion=\"%s\",tipo=\"%s\",coordenadas=\"%s\",ubicacion=\"%s\",depositovinculado=\"%s\",contadorvinculado=\"%s\",email=\"%s\",clientefinal=\"%s\",nif=\"%s\",direccioncliente=\"%s\",formapago=\"%s\",fechainstalacion=\"%s\",instalador=\"%s\",numserie=\"%s\",metricacontador=\"%s\",marca=\"%s\",modelo=\"%s\",apellidoscliente=\"%s\",cpcliente=\"%s\",localidadcliente=\"%s\",provinciacliente=\"%s\",telefonocliente=\"%s\",emailcliente=\"%s\",ajuste=\"%s\",m3notidiarios=\"%s\",m3notimail=\"%s\",horaconsumonotifi=\"%s\",mhoraconsumonotifi=\"%s\",diasnoactividadnotifi=\"%s\",mdiasnoactividadnotifi=\"%s\",bateria=\"%s\",m3notisemanales=\"%s\",m3notimensuales=\"%s\",m3notianuales=\"%s\",guardado=\"s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron,$nombre,$conexion,$descripcion,$tipo,$coordenadas,$ubicacion,$depositovinculado,$contadorvinculado,$email,$clientefinal,$nif,$direccioncliente,$formapago,$fechainstalacion,$instalador,$numserie,$metricacontador,$marca,$modelo,$apellidoscliente,$cpcliente,$localidadcliente,$provinciacliente,$telefonocliente,$emailcliente,$ajuste,$m3notidiarios,$m3notimail,$horaconsumonotifi,$mhoraconsumonotifi,$diasnoactividadnotifi,$mdiasnoactividadnotifi,$bateria,$m3notisemanales,$m3notimensuales,$m3notianuales,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1124345");
+		}
+
+		$titulof="EDICIÓN DE NODO";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,conexion,guardado,descripcion,idusuario,token,internal,tipo,coordenadas,ubicacion,uid,zonanodo,depositovinculado,contadorvinculado,email,clientefinal,nif,direccioncliente,formapago,fechainstalacion,instalador,numserie,metricacontador,marca,modelo,apellidoscliente,cpcliente,localidadcliente,provinciacliente,telefonocliente,emailcliente,litrosporpulsos,ajuste,m3notidiarios,m3notimail,horaconsumonotifi,mhoraconsumonotifi,diasnoactividadnotifi,mdiasnoactividadnotifi,bateria,m3notisemanales,m3notimensuales,m3notianuales FROM contadores_nodos WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 1233");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$conexion=$fila[1];
+			$guardado=$fila[2];
+			$descripcion=$fila[3];
+			$idusuario=$fila[4];
+			$token=$fila[5];
+			$internal=$fila[6];
+			$tipo=$fila[7];
+			$coordenadas=$fila[8];
+			$ubicacion=$fila[9];
+			$uid=$fila[10];
+			$zonanodo=$fila[11];
+			$depositovinculado=$fila[12];
+			$contadorvinculado=$fila[13];
+			$email=$fila[14];
+			$clientefinal=$fila[15];
+			$nif=$fila[16];
+			$direccioncliente=$fila[17];
+			$formapago=$fila[18];
+			$fechainstalacion=$fila[19];
+			$instalador=$fila[20];
+			$numserie=$fila[21];
+			$metricacontador=$fila[22];
+			$marca=$fila[23];
+			$modelo=$fila[24];
+			$apellidoscliente=$fila[25];
+			$cpcliente=$fila[26];
+			$localidadcliente=$fila[27];
+			$provinciacliente=$fila[28];
+			$telefonocliente=$fila[29];
+			$emailcliente=$fila[30];
+			$litrosporpulsos=$fila[31];
+			$ajuste=$fila[32];
+			$m3notidiarios=$fila[33];
+			$m3notimail=$fila[34];
+			$horaconsumonotifi=$fila[35];
+			$mhoraconsumonotifi=$fila[36];
+			$diasnoactividadnotifi=$fila[37];
+			$mdiasnoactividadnotifi=$fila[38];
+			$bateria=$fila[39];
+			$m3notisemanales=$fila[40];
+			$m3notimensuales=$fila[41];
+			$m3notianuales=$fila[42];
+
+
+			//lecturas
+			$patron2="SELECT SUM(lectura) FROM contadores_historial WHERE contador=\"%s\" AND borrado=\"n\"";
+			$sql2=sprintf($patron2,$_GET["i"]);
+			$respuesta2=mysqli_query($con,$sql2) or die ("Error al buscar 9632523444535822");
+			$fila2=mysqli_fetch_array($respuesta2);
+			$utlimaLecturaMCubicos=($fila2[0]/1000)+$fila[6];//pasar a m3, y mas el ajuste
+			mysqli_free_result($respuesta2);
+
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE NODO";
+          }else{
+
+			$nombre="";
+			$conexion="off";
+			$descripcion="";
+			$idusuario=0;
+			$token=creaCompruebaTokenUsado("","contadores_nodos",$con);
+			$internal="";
+			$tipo=0;
+			$coordenadas="";
+			$ubicacion="";
+			$uid="";
+			$zonanodo="";
+			$depositovinculado="";
+			$contadorvinculado=0;
+			$email="";
+			$clientefinal="";
+			$nif="";
+			$direccioncliente="";
+			$formapago="";
+			$fechainstalacion=date("Y-m-d");
+			$instalador="";
+			$numserie="";
+			$metricacontador=0;
+			$marca="";
+			$modelo="";
+			$apellidoscliente="";
+			$cpcliente="";
+			$localidadcliente="";
+			$provincia=0;
+			$telefonocliente="";
+			$emailcliente="";
+			$litrosporpulsos=0;
+			$ajuste=0;
+			//avisos
+			$m3notidiarios=0;
+			$m3notimail="";
+			$horaconsumonotifi="00:00:00";
+			$mhoraconsumonotifi="";
+			$diasnoactividadnotifi=0;
+			$mdiasnoactividadnotifi="";
+			$bateria=0;
+			$m3notisemanales=0;
+			$m3notimensuales=0;
+			$m3notianuales=0;
+			$utlimaLecturaMCubicos=0;
+			$guardado="n";
+
+			$patron="INSERT INTO contadores_nodos SET nombre=\"\",conexion=\"\",descripcion=\"\",tipo=\"0\",coordenadas=\"\",ubicacion=\"\",depositovinculado=\"\",contadorvinculado=\"0\",email=\"\",clientefinal=\"\",nif=\"\",direccioncliente=\"\",formapago=\"\",fechainstalacion=\"2000-01-01\",instalador=\"\",numserie=\"\",metricacontador=\"0\",marca=\"\",modelo=\"\",apellidoscliente=\"\",cpcliente=\"\",localidadcliente=\"\",provinciacliente=\"0\",telefonocliente=\"\",emailcliente=\"\",ajuste=\"0\",m3notidiarios=\"0\",m3notimail=\"\",horaconsumonotifi=\"00:00\",mhoraconsumonotifi=\"0\",diasnoactividadnotifi=\"0\",mdiasnoactividadnotifi=\"0\",bateria=\"0\",m3notisemanales=\"0\",m3notimensuales=\"0\",m3notianuales=\"0\",guardado=\"n\",idusuario=\"%s\",token=\"%s\",internal=\"\",uid=\"\",zonanodo=\"\",litrosporpulsos=\"0\",notificadopasadoconsumomaildiario=\"2000-01-01\",notificadopasadoconsumomailsemanal=\"2000-01-01\",notificadopasadoconsumomailmensual=\"2000-01-01\",notificadopasadoconsumomailanual=\"2000-01-01\",notificadoconsumomail=\"2000-01-01\",notificadonoactividadmail=\"2000-01-01\",fechaalta=\"%s\"";
+			$sql=sprintf($patron,$idusuario,$token,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 133");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM contadores_nodos WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 143");
+
+			$titulof="NUEVO NODO";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=5');</script>");
+		printf("<script>cargaLocation('index.php?s=6&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=5" class="text-muted">Contadores</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',3,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=6<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información del Nodo <?php echo "  - ".$utlimaLecturaMCubicos."(Lect. m3)";?></h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Conexión:<span class="text-danger">*</span></label>
+											<input data-switch="true" type="checkbox" name="conexion" <?php if($conexion=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Lectura Inicial(M3):</label>
+											<input type="number" class="form-control" name="ajuste" value="<?php echo $ajuste;?>" placeholder="Ajuste" maxlength="10"/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+											<?php echo cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+										</div>
+										<div class="col-lg-6">
+											<label>Nombre:<span class="text-danger">*</span></label>
+											<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" maxlength="65"/>
+											<span class="form-text text-muted">Por favor introduce el nombre del nodo.</span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Email:</label>
+											<input type="text" class="form-control <?php if($faltacampo && $email==""){echo "is-invalid";}?>" name="email" value="<?php echo $email;?>" placeholder="Email" maxlength="40"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Número Serie:</label>
+											<input type="text" class="form-control" name="numserie" value="<?php echo $numserie;?>" placeholder="Número serie" maxlength="65"/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Tipo contador:<span class="text-danger">*</span></label>
+											<?php echo cargaTipoContador($tipo,$faltacampo,$con);?>
+										</div>
+										<div class="col-lg-6">
+											<label>Diámetro:</label>
+											<?php echo cargaMetricaContadores($metricacontador,"metricacontador",$con);?>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6" id="divInputDepositoRel" <?php if($tipo==1){echo "style='display:block;'";}else{echo "style='display:none;'";}?>>
+											<label>Depósito Asociado:</label>
+											<input type="text" class="form-control" name="depositovinculado" value="<?php echo $depositovinculado;?>" placeholder="Depósito Asociado" maxlength="65"/>
+										</div>
+										<div class="col-lg-6" id="divInputContadorRel" <?php if($tipo==2 || $tipo==3){echo "style='display:block;'";}else{echo "style='display:none;'";}?>>
+											<label>Contador Asociado:</label>
+											<?php echo cargaContadoresGenerico($contadorvinculado,"contadorvinculado",$idusuario,$con);?>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Marca:</label>
+											<input type="text" class="form-control" name="marca" value="<?php echo $marca;?>" placeholder="Marca" maxlength="65"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Modelo:</label>
+											<input type="text" class="form-control" name="modelo" value="<?php echo $modelo;?>" placeholder="Modelo" maxlength="65"/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Fecha Instalción:</label>
+											<input type="date" class="form-control" name="fechainstalacion" value="<?php echo $fechainstalacion;?>"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Instalador:</label>
+											<input type="text" class="form-control" name="instalador" value="<?php echo $instalador;?>" placeholder="Instalador" maxlength="65"/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Coordenadas:</label>
+											<input type="text" class="form-control" name="coordenadas" value="<?php echo $coordenadas;?>" placeholder="Coordenadas" maxlength="65"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Ubicación:</label>
+											<input type="text" class="form-control" name="ubicacion" value="<?php echo $ubicacion;?>" placeholder="Ubicación" maxlength="65"/>
+										</div>
+									</div>
+						 			<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Batería:</label>
+											<input type="number" class="form-control" name="bateria" value="<?php echo $bateria;?>" placeholder="Bateria" maxlength="65"/>
+										</div>
+										<div class="col-lg-6">
+											
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-12">
+											<label>Observaciones:</label>
+											<input type="text" class="form-control" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" maxlength="140"/>
+										</div>
+									</div>
+								</div>
+                         <!--begin::div-Form-->
+                            <!--<form class="form">-->
+
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <!--<div class="col-lg-6">
+                                            <button type="reset" class="btn btn-primary mr-2">Save</button>
+                                            <button type="reset" class="btn btn-secondary">Cancel</button>
+                                        </div>
+                                        <div class="col-lg-6 text-lg-right">
+                                            <button type="reset" class="btn btn-danger">Delete</button>
+                                        </div>-->
+                                    </div>
+                                </div>
+                                <!--</form>-->
+                            <!--end::DIV-Form-->
+                        </div>
+						<!--end::Card-->
+	
+						<!--begin::Card-->
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Facturación (Cliente Final)</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                               <div class="form-group row">
+									<div class="col-lg-6">
+										<label>Nombre Cliente Final:</label>
+										<input type="text" class="form-control" name="clientefinal" value="<?php echo $clientefinal;?>" placeholder="Cliente Final" maxlength="65"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Apellidos Cliente:</label>
+										<input type="text" class="form-control" name="apellidoscliente" value="<?php echo $apellidoscliente;?>" placeholder="Apellidos" maxlength="65"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>NIF/CIF:</label>
+										<input type="text" class="form-control" name="nif" value="<?php echo $nif;?>" placeholder="NIF/CIF" maxlength="12"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Dirección Cliente:</label>
+										<input type="text" class="form-control" name="direccioncliente" value="<?php echo $direccioncliente;?>" placeholder="Dirección Cliente" maxlength="65"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Provincia:</label>
+										<?php echo cargaProvinciasGenerico($provinciacliente,"provinciacliente",$con);?>
+									</div>
+									<div class="col-lg-6">
+										<label>Localidad:</label>
+										<input type="text" class="form-control" name="localidadcliente" value="<?php echo $localidadcliente;?>" placeholder="Localidad Cliente" maxlength="65"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Cód. Postal:</label>
+										<input type="text" class="form-control" name="cpcliente" value="<?php echo $cpcliente;?>" placeholder="CP Cliente" maxlength="10"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Forma Pago:</label>
+										<select class="form-control" name="formapago" >
+											<option value="">Selecciona Forma Pago:</option>
+											<option value="ban" <?php if($formapago=="ban"){echo "selected";}?>>Banco</option>
+											<option value="tar" <?php if($formapago=="tar"){echo "selected";}?>>Tarjeta</option>
+											<option value="biz" <?php if($formapago=="biz"){echo "selected";}?>>Bizum</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Teléfono:</label>
+										<input type="text" class="form-control" name="telefonocliente" value="<?php echo $telefonocliente;?>" placeholder="Teléfono Cliente" maxlength="20"/>
+									</div>
+									<div class="col-lg-6">
+										<label>Email Cliente:</label>
+										<input type="text" class="form-control" name="emailcliente" value="<?php echo $emailcliente;?>" placeholder="Email Cliente" maxlength="40"/>
+									</div>
+								</div>
+                            </div>
+                        </div>
+						<!--end::Card-->
+    
+                        <!--begin::Card-->
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Comunicación del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<?php if($_SESSION["permisossession"]==1){?>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Token:</label>
+										<input type="text" class="form-control" name="token" value="<?php echo $token;?>" placeholder="Token" />
+									</div>
+									<div class="col-lg-6">
+										<label>Descripción (RemoteIot):</label>
+										<input type="text" class="form-control" name="internal" value="<?php echo $internal;?>" placeholder="Internal" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>UID:</label>
+										<input type="text" class="form-control" name="uid" value="<?php echo $uid;?>" placeholder="UID" />
+									</div>
+									<div class="col-lg-6">
+										<label>Nodo Zona:</label>
+										<input type="text" class="form-control" name="zonanodo" value="<?php echo $zonanodo;?>" placeholder="Nodo Zona" maxlength="65"/>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Litros por Pulso (L):</label>
+										<input type="number" class="form-control" name="litrosporpulsos" value="<?php echo $litrosporpulsos;?>" placeholder="Litros por pulso" maxlength="12"/>
+									</div>
+									<div class="col-lg-6">
+										
+									</div>
+								</div>
+								<?php }?>
+                            </div>
+                        </div>
+						<!--end::Card-->
+						
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial lecturas (limitado 50 últimos registros)</h3>
+                                </div>
+                                <div class="card-toolbar" style="justify-content: inherit;">
+                                    <div>
+                                        <input class="form-control" type="date" id="fechaHistorialLectura" value="<?php echo $_SESSION["fechaHistorialContadorLectu"];?>"/>
+                                    </div>
+
+                                    <div class="btn btn-info font-weight-bolder font-size-sm ml-3" onClick="filtrarHistorialLecturas(<?php echo $id?>);">Aplicar
+                                    </div>
+                                    
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Search Form-->
+								<div class="mb-7">
+									<div class="row align-items-center">
+										<div class="col-lg-9 col-xl-8">
+											<div class="row align-items-center">
+												<div class="col-md-4 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">m3 (ajuste):</label>
+														<!--<input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="4" class="form-control" id="metrosh" />-->
+                                                        <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" class="form-control" id="metrosh" />
+													</div>
+												</div>
+												<div class="col-md-4 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Fecha:</label>
+														<input type="date" class="form-control" id="fechah" value="<?php echo date("Y-m-d");?>"/>
+													</div>
+												</div>
+												<div class="col-md-4 my-2 my-md-0">
+													<div class="d-flex align-items-center">
+														<label class="mr-3 mb-0 d-none d-md-block">Hora:</label>
+														<input type="time" class="form-control" id="horah" value="<?php echo date("H:i:s");?>"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+											<a href="#" class="btn btn-light-primary px-6 font-weight-bold" onClick="crearHistorialContador('<?php echo $id;?>');return false;">Añadir</a>
+										</div>
+									</div>
+								</div>
+								<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaLecturasContador">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaLecturasContador">
+									<?php contadoresHistorialLecturas($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+	
+						<!--begin::Card-->
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Historial facturas</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                            </div>
+                        </div>
+						<!--end::Card-->
+						
+						<!--begin::Card-->
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Subidor de Imágenes</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="dropzone dropzone-default dropzone-primary" id="kt_dropzone_2">
+                                        <div class="dropzone-msg dz-message needsclick">
+                                            <h3 class="dropzone-msg-title">Suelta los archivos aquí o haz clic para subir.</h3>
+                                            <span class="dropzone-msg-desc">Sube hasta 10 archivos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						<!--end::Card-->
+	
+						<!--begin::Card-->
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Cámara</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--begin::Video-->
+								<div class="embed-responsive embed-responsive-16by9">
+									<!--<iframe class="embed-responsive-item rounded" src="https://www.youtube.com/embed/qIHXpnASPAA" allowfullscreen="allowfullscreen"></iframe>-->
+								</div>
+								<!--end::Video-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+	
+						<!--begin::Card-->
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Gráficas</h3>
+                                </div>
+                                <div class="card-toolbar" style="justify-content: inherit;">
+                                    <div class="mr-3">
+                                        <input class="form-control" type="date" id="fechaGraficaContador" value="<?php echo date('Y-m-d');?>" onChange="cargarGraficaConsumosContadores('graficaLecturaContador',<?php echo $id;?>,'m3');"/>
+                                    </div>
+                                    
+                                    <div>
+                                        <select class="form-control" id="selectGraficaLecturasFormato" onChange="cargarGraficaConsumosContadores('graficaLecturaContador',<?php echo $id;?>,'m3');">
+                                            <option value="1">m3</option>
+                                            <option value="2">Litros</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="ml-3">
+                                        <select class="form-control" id="selectGraficaLecturas" onChange="cargarGraficaConsumosContadores('graficaLecturaContador',<?php echo $id;?>,'m3');">
+                                            <option value="1">24 Horas</option>
+                                            <option value="2">Semana</option>
+                                            <option value="3">Mes</option>
+                                            <option value="4">Año</option>
+                                        </select>
+                                    </div>
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1 ml-3" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandoGraficaLecturasContador">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin::Chart-->
+								<div id="graficaLecturaContador"></div>
+								<!--end::Chart-->
+                            </div>
+                        </div>
+					    <!--end::Card-->
+	
+						<!--begin::Card-->
+    
+    
+                        <div class="card card-custom card-collapsed mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Avisos / Alertas</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>m3 diarios:</label>
+										<input type="number" class="form-control" name="m3notidiarios" value="<?php echo $m3notidiarios;?>" placeholder="m3" />
+										<span class="form-text text-muted">m3 que una vez sobrepasados, recibiremos el aviso (diario).</span>
+									</div>
+									<div class="col-lg-6">
+										<label>Emails aviso:</label>
+										<input type="text" class="form-control" name="m3notimail" value="<?php echo $m3notimail;?>" placeholder="emails;email" />
+										<span class="form-text text-muted">Varios email separados por  ; (punto y coma).</span>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>m3 semanales:</label>
+										<input type="number" class="form-control" name="m3notisemanales" value="<?php echo $m3notisemanales;?>" placeholder="m3" />
+										<span class="form-text text-muted">m3 que una vez sobrepasados, recibiremos el aviso (semanal).</span>
+									</div>
+									<div class="col-lg-6">
+										
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>m3 mensuales:</label>
+										<input type="number" class="form-control" name="m3notimensuales" value="<?php echo $m3notimensuales;?>" placeholder="m3" />
+										<span class="form-text text-muted">m3 que una vez sobrepasados, recibiremos el aviso (mensual).</span>
+									</div>
+									<div class="col-lg-6">
+										
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>m3 anuales:</label>
+										<input type="number" class="form-control" name="m3notianuales" value="<?php echo $m3notianuales;?>" placeholder="m3" />
+										<span class="form-text text-muted">m3 que una vez sobrepasados, recibiremos el aviso (anual).</span>
+									</div>
+									<div class="col-lg-6">
+										
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Hora Notificar consumo:</label>
+										<input type="time" class="form-control" name="horaconsumonotifi" value="<?php echo $horaconsumonotifi;?>" placeholder="12:00" />
+										<span class="form-text text-muted">Hora a la que recibir el consumo acumulado.</span>
+									</div>
+									<div class="col-lg-6">
+										<label>Emails aviso:</label>
+										<input type="text" class="form-control" name="mhoraconsumonotifi" value="<?php echo $mhoraconsumonotifi;?>" placeholder="emails;email" />
+										<span class="form-text text-muted">Varios email separados por  ; (punto y coma).</span>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Días Sin Actividad (Días):</label>
+										<input type="number" class="form-control" name="diasnoactividadnotifi" value="<?php echo $diasnoactividadnotifi;?>" placeholder="0" maxlength="4"/>
+										<span class="form-text text-muted">Notificar si hay varios días sin lecturas.</span>
+									</div>
+									<div class="col-lg-6">
+										<label>Emails aviso:</label>
+										<input type="text" class="form-control" name="mdiasnoactividadnotifi" value="<?php echo $mdiasnoactividadnotifi;?>" placeholder="emails;email" />
+										<span class="form-text text-muted">Varios email separados por  ; (punto y coma).</span>
+									</div>
+								</div>
+                            </div>
+                        </div>
+						<!--end::Card-->
+                		
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script><!--si lo quitas funciona la grafica-->
+<script src="assets/js/scripts.bundle.js"></script><!--si lo quitas funciona la grafica-->
+<!--end::Global Theme Bundle-->
+
+<!--begin::Page Scripts(used by this page)-->
+<script src="js/graficas.js<?php echo '?t='.time();?>"></script>
+<script src="js/subidores.js<?php echo '?t='.time();?>"></script>
+<!--end::Page Scripts-->
+
+<script>
+    jQuery(document).ready(function() {
+		//tabla
+        var columnasTabHistorial= [null,{ "width": "15%" },{ "width": "15%" },{ "width": "30%" },{ "width": "30%" },{ "width": "10%" }];
+        cargarTabla.init("tablaLecturasContador",columnasTabHistorial,[1, "asc"],50,true);
+		
+		//grafica
+		cargarGraficaConsumosContadores("graficaLecturaContador",<?php echo $id;?>,"m3");
+    });
+</script>

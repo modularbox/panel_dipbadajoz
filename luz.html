@@ -1,0 +1,335 @@
+<?php
+
+	$completo=false;
+	$faltacampo=false;
+	
+	if(isset($_POST["accion"])){
+		$id=$_POST["accion"];
+		$completo=true;
+
+		$guardado=$_POST["guardado"];
+
+		$nombre=quitaComillasD($_POST["nombre"]);
+		$idusuario=quitaComillasD($_POST["idusuario"]);
+		$descripcion=quitaComillasD($_POST["descripcion"]);
+		$token=quitaComillasD($_POST["token"]);
+		$internal=quitaComillasD($_POST["internal"]);
+		$email=quitaComillasD($_POST["email"]);
+		$canalesporsalida=quitaComillasD($_POST["canalesporsalida"]);
+
+		//$conexion=quitaComillasD($_POST["conexion"]);
+		if(!isset($_POST["conexion"])){
+			$conexion="off";
+		}else{
+			$conexion=quitaComillasD($_POST["conexion"]);
+		}
+
+		
+		$modo=intval(quitaComillasD($_POST["modo"]));
+		$tiempoModo=intval(quitaComillasD($_POST["tiempoModo"]));
+
+		$datosUpdate="";
+		if($_SESSION["permisossession"]==1){
+			$datosUpdate=",idusuario=\"".$idusuario."\",token=\"".$token."\",internal=\"".$internal."\",canalesporsalida=\"".$canalesporsalida."\"";
+		}
+		
+		//comprobar que el internal no se repite, ya que el token no se usa
+		$internalRepetido=false;
+		$patron99="SELECT id FROM luces_nodos WHERE id<>\"%s\" AND internal=\"%s\"";
+		$sql99=sprintf($patron99,$id,$internal);
+		$respuesta99=mysqli_query($con,$sql99) or die ("Error al buscar 34559967566606780956563454545");
+		if(mysqli_num_rows($respuesta99)>0){
+			$fila99=mysqli_fetch_array($respuesta99);
+			$internalRepetido=true;
+		}
+		mysqli_free_result($respuesta99);
+
+   		//para la validación de campos obligatorios
+		if($nombre=="" || $idusuario==0 || $email=="" || $internalRepetido){
+			$completo=false;
+			$faltacampo=true;
+		}
+
+		if($completo){
+			$guardado="s";
+
+			$patron="UPDATE luces_nodos SET nombre=\"%s\",conexion=\"%s\",descripcion=\"%s\",email=\"%s\",modo=\"%s\",tiempomodo=\"%s\",guardado=\"s\"%s WHERE id=\"%s\"";
+			$sql=sprintf($patron,$nombre,$conexion,$descripcion,$email,$modo,$tiempoModo,$datosUpdate,$id);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 11243458990");
+		}
+
+		$titulof="EDICIÓN DE NODO";
+	}else{
+      	if(isset($_GET["i"])){
+			$patron="SELECT nombre,conexion,guardado,descripcion,idusuario,token,internal,email,canalesporsalida,modo,tiempomodo FROM luces_nodos WHERE id=\"%s\"";
+			$sql=sprintf($patron,$_GET["i"]);
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 123365544");
+			$fila=mysqli_fetch_array($respuesta);
+
+			$nombre=$fila[0];
+			$conexion=$fila[1];
+			$guardado=$fila[2];
+			$descripcion=$fila[3];
+			$idusuario=$fila[4];
+			$token=$fila[5];
+			$internal=$fila[6];
+			$email=$fila[7];
+			$canalesporsalida=$fila[8];
+			$modo=$fila[9];	
+			$tiempoModo=$fila[10];
+
+			$id=$_GET["i"];
+
+			$titulof="EDICIÓN DE NODO";
+          }else{
+
+			$nombre="";
+			$estado="off";
+			$descripcion="";
+			$idusuario=0;
+			$token=creaCompruebaTokenUsado("","luces_nodos",$con);
+			$internal="";
+			$email="";
+			$characters="";
+			$schedule="";
+			$sequence="";
+			$ultimaconexion=date("Y-m-d");
+			$horaultimaconexion=date("H:i:s");
+			$canalesporsalida=0;
+			$guardado="n";
+			$conexion="off";
+			$modo=1;			
+			$tiempoModo=1;
+
+
+
+			$patron="INSERT INTO luces_nodos SET nombre=\"\",conexion=\"\",descripcion=\"\",guardado=\"n\",idusuario=\"%s\",token=\"%s\",internal=\"\",email=\"\",characters=\"\",schedule=\"\",canalesporsalida=0,sequence=\"\",ultimaconexion=\"%s\",horaultimaconexion=\"%s\",fechaalta=\"%s\"";
+			$sql=sprintf($patron,$idusuario,$token,$ultimaconexion,$horaultimaconexion,date("Y-m-d"));
+			$respuesta=mysqli_query($con,$sql) or die ("Error al buscar 13345763");
+			$id=mysqli_insert_id($con);
+
+			$patron3="DELETE FROM luces_nodos WHERE fechaalta<\"%s\" AND guardado=\"n\"";
+			$sql3=sprintf($patron3,date("Y-m-d"));
+			$respuesta3=mysqli_query($con,$sql3) or die ("Error al borrar 1434363");
+
+			$titulof="NUEVO NODO";
+          }
+      }
+   
+	if($completo){
+		//printf("<script>cargaLocation('index.php?s=8');</script>");
+		printf("<script>cargaLocation('index.php?s=9&i=%s');</script>",$id);
+	}
+?>
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Subheader-->
+	<div class="subheader py-2 py-lg-6 subheader-solid" id="kt_subheader">
+		<div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
+			<!--begin::Info-->
+			<div class="d-flex align-items-center flex-wrap mr-1">
+				<!--begin::Page Heading-->
+				<div class="d-flex align-items-baseline flex-wrap mr-5">
+					<!--begin::Page Title-->
+					<h5 class="text-dark font-weight-bold my-1 mr-5">DIP BADAJOZ | Nodos</h5>
+					<!--end::Page Title-->
+					<!--begin::Breadcrumb-->
+					<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+						<li class="breadcrumb-item">
+							<a href="index.php" class="text-muted">Inicio</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="index.php?s=8" class="text-muted">Luces</a>
+						</li>
+						<li class="breadcrumb-item">
+							<a href="" class="text-muted"><?php echo $nombre;?></a>
+						</li>
+					</ul>
+					<!--end::Breadcrumb-->
+				</div>
+				<!--end::Page Heading-->
+			</div>
+			<!--end::Info-->
+			<!--begin::Toolbar-->
+			<div class="d-flex align-items-center">
+				<button class="btn btn-success mr-2" onClick="ejecutaForm('formulario');">Guardar Cambios</button>
+				<?php if($_SESSION["permisossession"]==1 && $guardado=="s"){?>
+				<button class="btn btn-danger" onclick="confirmacion('warning','Eliminar Nodo','¿Estas seguro de que deseas eliminar este nodo?',6,'<?php echo $id;?>','','');">Eliminar</button>
+				<?php }?>
+			</div>
+			<!--end::Toolbar-->
+		</div>
+	</div>
+	<!--end::Subheader-->
+	<!--begin::Entry-->
+	<div class="d-flex flex-column-fluid">
+		<!--begin::Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					
+					 <form class="form" autocomplete="off" method="post" action="index.php?s=9<?php if($id>0){ echo "&i=".$id; } ?>" id="formulario" enctype="multipart/form-data">
+
+						<!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Conexión:<span class="text-danger">*</span></label>
+											<input data-switch="true" type="checkbox" name="conexion" <?php if($conexion=="on"){echo "checked='checked'";}?> data-on-color="success" data-off-color="danger"/>
+										</div>
+										<div class="col-lg-6">
+											<label>Email:</label>
+											<input type="text" class="form-control <?php if($faltacampo && $email==""){echo "is-invalid";}?>" name="email" value="<?php echo $email;?>" placeholder="Email" maxlength="40"/>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Usuario/Cliente:<span class="text-danger">*</span></label>
+											<?php echo cargaUsuariosGenerico($idusuario,"idusuario",$faltacampo,$con);?>
+										</div>
+										<div class="col-lg-6">
+											<label>Nombre:<span class="text-danger">*</span></label>
+											<input type="text" class="form-control <?php if($faltacampo && $nombre==""){echo "is-invalid";}?>" name="nombre" value="<?php echo $nombre;?>" placeholder="Nombre" maxlength="65"/>
+											<span class="form-text text-muted">Por favor introduce el nombre del nodo.</span>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-6">
+											<label>Modo:</label>
+											<?php echo cargaModoNodoLuz($modo,"modo",$id,$con);?>
+										</div>
+										<div class="col-lg-6" id="bloqueTiempoModoNodo" <?php echo $modo==2 ? "style='display:block'" :  "style='display:none'" ?>>
+											<label>Tiempo Modo:</label>
+											<?php echo cargaTiempoModoNodoLuz($tiempoModo,"tiempoModo",$con);?>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="col-lg-12">
+											<label>Observaciones:</label>
+											<input type="text" class="form-control" name="descripcion" value="<?php echo $descripcion;?>" placeholder="Descripcion" maxlength="140"/>
+										</div>
+									</div>
+								</div>
+                         <!--begin::div-Form-->
+                            <!--<form class="form">-->
+
+                                <div class="card-footer">
+                                    <div class="row">
+                                       
+                                    </div>
+                                </div>
+                                <!--</form>-->
+                            <!--end::DIV-Form-->
+                        </div>
+						<!--end::Card-->
+	
+                        <!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Comunicación del Nodo</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<?php if($_SESSION["permisossession"]==1){?>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Token:</label>
+										<input type="text" class="form-control" name="token" value="<?php echo $token;?>" placeholder="Token" />
+									</div>
+									<div class="col-lg-6">
+										<label>Descripción (RemoteIot):</label>
+										<input type="text" class="form-control <?php if($faltacampo && $internalRepetido){echo "is-invalid";}?>" name="internal" value="<?php echo $internal;?>" placeholder="Internal" />
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-6">
+										<label>Canales Por Salida:</label>
+										<?php echo cargaCanalesPorSalida($canalesporsalida,"canalesporsalida",$faltacampo,$con);?>
+									</div>
+									<div class="col-lg-6">
+										
+									</div>
+								</div>
+								<?php }?>
+                            </div>
+                        </div>
+						<!--end::Card-->
+						 
+						 <!--begin::Card-->
+                        <div class="card card-custom mt-2 gutter-b" data-card="true">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <h3 class="card-label">Información programas</h3>
+                                </div>
+                                <div class="card-toolbar">
+                                    <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                                        <i class="ki ki-arrow-down icon-nm"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+								<!--end::Search Form-->
+                                <div class="blockUI blockMsg blockElement cargadorBloque">
+                                    <div class="blockui" id="cargandotablaHorarioHorasResumen">
+                                        <span>Cargando...</span>
+                                        <span class="spinner spinner-loader spinner-primary"></span>
+                                    </div>
+                                </div>
+								<!--begin: Datatable-->
+								<table class="table table-separate table-head-custom table-checkable" style="visibility: hidden" id="tablaHorarioHorasResumen">
+									<?php nodoHorariosLucesConf($id,$con);?>
+								</table>
+								<!--end: Datatable-->
+                            </div>
+                        </div>
+						<!--end::Card-->
+						
+						<input type="hidden" value="<?php echo $id; ?>" id="accion" name="accion">
+                        <input type="hidden" value="<?php echo $guardado; ?>" id="guardado" name="guardado">
+                	</form>
+					
+				</div>
+			</div>
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Entry-->
+</div>
+<!--end::Content-->
+
+<!--start para esta pagina switch-->
+<script src="assets/js/pages/crud/forms/widgets/bootstrap-switch.js"></script>
+<!--end para esta pagina switch-->
+
+<!--begin::Global Theme Bundle(used by all pages)-->
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+<script src="assets/plugins/custom/prismjs/prismjs.bundle.js"></script><!--si lo quitas funciona la grafica-->
+<script src="assets/js/scripts.bundle.js"></script><!--si lo quitas funciona la grafica-->
+<!--end::Global Theme Bundle-->
+
+
+<script>
+    jQuery(document).ready(function() {
+		//tabla
+        var columnasHorarioHorasResumen= [null,{ "width": "30%" },{ "width": "30%" },{ "width": "15%" },{ "width": "15%" },{ "width": "10%" }];
+        cargarTabla.init("tablaHorarioHorasResumen",columnasHorarioHorasResumen,[0, "asc"],50,true);
+    });
+</script>

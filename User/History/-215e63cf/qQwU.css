@@ -1,0 +1,162 @@
+.color-white {
+  background-color: white !important;
+}
+
+.select-menu-container {
+  background-color: #ff1713 !important;
+}
+
+.menu-container-hover:hover {
+  background-color: #ff1713 !important;
+}
+
+.menu-link:hover {
+  background-color: #f73330d2 !important;
+}
+
+.menu-link:focus {
+    background-color: #f73330d2 !important;
+}
+
+.li.menu-item.menu-item-submenu > a {
+  background-color: aqua;
+}
+
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading,
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link {
+    background-color: #ff1713 !important;
+}
+.aside-menu
+  .menu-nav
+  > .menu-item.menu-item-active
+  > .menu-heading
+  .menu-icon.svg-icon
+  svg
+  g
+  [fill],
+.aside-menu
+  .menu-nav
+  > .menu-item.menu-item-active
+  > .menu-link
+  .menu-icon.svg-icon
+  svg
+  g
+  [fill] {
+  fill: #fff !important;
+}
+
+.svg-icon.svg-icon-primary svg g [fill] {
+  fill: #000000b0 !important;
+}
+
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-heading,
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-link {
+  background-color: #ff1713 !important;
+}
+
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-heading,
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item.menu-item-here
+  > .menu-link {
+  background-color: #f73330d2 !important;
+}
+
+.aside-menu .menu-nav > .menu-item > .menu-heading .menu-text,
+.aside-menu .menu-nav > .menu-item > .menu-link .menu-text {
+  color: #000;
+  font-weight: 500;
+}
+
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-heading .menu-text,
+.aside-menu .menu-nav > .menu-item.menu-item-active > .menu-link .menu-text {
+  color: #fff;
+  font-weight: bold;
+}
+
+.aside-menu
+  .menu-nav
+  > .menu-item.menu-item-here
+  > .menu-heading
+  .menu-icon.svg-icon
+  svg
+  g
+  [fill],
+.aside-menu
+  .menu-nav
+  > .menu-item.menu-item-here
+  > .menu-link
+  .menu-icon.svg-icon
+  svg
+  g
+  [fill] {
+    fill: #fff !important;
+}
+
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item
+  > .menu-heading
+  .menu-text,
+.aside-menu
+  .menu-nav
+  > .menu-item
+  .menu-submenu
+  .menu-item
+  > .menu-link
+  .menu-text {
+  color: #000;
+  font-weight: 500;
+}
+
+i {
+  font-size: 1.45rem;
+  color: #000;
+  padding-right: 10px;
+}
+
+
+.aside-menu .menu-nav > .menu-item.menu-item-here > .menu-heading .menu-text, .aside-menu .menu-nav > .menu-item.menu-item-here > .menu-link .menu-text{
+  color: #fff;
+  font-weight: bold;
+}
+
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-here > .menu-heading .menu-bullet.menu-bullet-dot > span, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-here > .menu-link .menu-bullet.menu-bullet-dot > span{
+  background-color: #FFF !important;
+}
+
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-heading .menu-text, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-link .menu-text{
+    color: white;
+    font-weight: bold;
+}
+
+.aside-menu .menu-nav > .menu-item .menu-submenu > .menu-heading .menu-bullet, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item > .menu-link .menu-bullet{
+    color: black;
+    
+}
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-heading .menu-bullet, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-link .menu-bullet{
+    color: white;
+}
+.aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-heading, .aside-menu .menu-nav > .menu-item .menu-submenu .menu-item.menu-item-open > .menu-link{
+
+  background-color: #f73330d2 !important;
+}
