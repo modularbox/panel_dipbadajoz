@@ -1,16 +1,18 @@
 .form-control.form-control-solid {
-background-color: #f7333093;
+background-color: #f73330d2;
 color: #fff !important;
+font-weight: bold;
 }
 
 .form-control.form-control-solid:focus{
-
-    background-color: #f73330d2;
+    
+    background-color: #f7333093;
     color: #fff !important;
+    font-weight: bold;
 }
 
 .btn.btn-secondary{
-    background-color: #f7333093;
+    background-color: #f73330d2;
 }
 
 .btn.btn-secondary:hover{
