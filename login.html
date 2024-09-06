@@ -81,10 +81,11 @@
     <script>
       // Array con los nombres de las imágenes
       const imagenes = [
-        "ims1",
-        "ims2",
-        "ims3",
-        "ims4",
+		"1.jpg",
+        "ims1.png",
+        "ims2.png",
+        "ims3.png",
+        "ims4.png",
       ];
       let indiceActual = 0;
 
@@ -94,7 +95,7 @@
         const img = document.getElementById("pasador-imagen");
 
         // Cambiar el src de la imagen
-        img.src = `archivos_subidos/img_inicio_login/${imagenes[indiceActual]}.jpg?v=1.0.2`;
+        img.src = `archivos_subidos/img_inicio_login/${imagenes[indiceActual]}?v=1.0.2`;
 
         // Incrementar el índice para la siguiente imagen
         indiceActual++;
