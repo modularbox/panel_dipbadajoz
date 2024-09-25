@@ -55,7 +55,7 @@ var KTLogin = function() {
             validation.validate().then(function(status) {
 		        if (status == 'Valid') {
                     swal.fire({
-		                text: "Bienvenido a MODULARBOX!!",
+		                text: "Bienvenido a DIP BADAJOZ!!",
 		                icon: "success",
 		                buttonsStyling: false,
 		                confirmButtonText: "Correcto!",
@@ -161,7 +161,7 @@ var KTLogin = function() {
             validation.validate().then(function(status) {
 		        if (status == 'Valid') {
                     swal.fire({
-		                text: "Bienvenido a MODULARBOX!!",
+		                text: "Bienvenido a DIPBADAJOZ!!",
 		                icon: "success",
 		                buttonsStyling: false,
 		                confirmButtonText: "Correcto!",
